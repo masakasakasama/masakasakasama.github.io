@@ -1,90 +1,892 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Progate</title>
-  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-  <link rel="stylesheet" type="text/css" href="stylesheet.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ふたり割り勘ノート</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f6fb;
+      --card: #ffffff;
+      --ink: #1e1f26;
+      --muted: #5b6472;
+      --line: #e1e4ef;
+      --accent: #3b82f6;
+      --accent-soft: rgba(59, 130, 246, 0.12);
+      --danger: #ef4444;
+      --success: #22c55e;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: "Helvetica Neue", "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+    }
+    header {
+      background: linear-gradient(120deg, #1f2937, #0f172a);
+      color: #fff;
+      padding: 32px 24px 40px;
+    }
+    header h1 {
+      margin: 0 0 8px;
+      font-size: 28px;
+    }
+    header p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 14px;
+    }
+    main {
+      max-width: 1100px;
+      margin: -24px auto 48px;
+      padding: 0 20px;
+    }
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+    .grid-3 {
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(31, 41, 55, 0.08);
+      border: 1px solid var(--line);
+    }
+    h2 {
+      margin: 0 0 16px;
+      font-size: 18px;
+    }
+    h3 {
+      margin: 0 0 12px;
+      font-size: 15px;
+    }
+    .muted {
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .summary-value {
+      font-size: 24px;
+      font-weight: 700;
+      margin-top: 8px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .badge.danger {
+      background: rgba(239, 68, 68, 0.12);
+      color: var(--danger);
+    }
+    form {
+      display: grid;
+      gap: 12px;
+    }
+    label {
+      display: grid;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    input, select, textarea {
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      font-size: 14px;
+      font-family: inherit;
+      background: #fff;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
+    .row {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+    button {
+      border: none;
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-size: 14px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .primary {
+      background: var(--accent);
+      color: #fff;
+    }
+    .ghost {
+      background: transparent;
+      border: 1px solid var(--line);
+      color: var(--muted);
+    }
+    .danger {
+      background: var(--danger);
+      color: #fff;
+    }
+    .success {
+      background: var(--success);
+      color: #fff;
+    }
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .table th, .table td {
+      border-bottom: 1px solid var(--line);
+      padding: 10px 6px;
+      text-align: left;
+    }
+    .table th {
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .table tr:last-child td {
+      border-bottom: none;
+    }
+    .right {
+      text-align: right;
+    }
+    .pill {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #f3f4f6;
+      font-size: 12px;
+    }
+    .stack {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .share-box {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+    .notice {
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: #fef3c7;
+      color: #92400e;
+      font-size: 13px;
+      margin-top: 12px;
+    }
+    .undo {
+      background: rgba(59, 130, 246, 0.1);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 13px;
+      color: var(--accent);
+      display: none;
+      align-items: center;
+      gap: 8px;
+    }
+    .undo.active {
+      display: inline-flex;
+    }
+    @media (max-width: 640px) {
+      header {
+        padding: 24px 20px 32px;
+      }
+      .summary-value {
+        font-size: 20px;
+      }
+      .table {
+        font-size: 12px;
+      }
+    }
+  </style>
 </head>
 <body>
   <header>
-    <div class="container">
-      <div class="header-left">
-        <img class="logo" src="https://prog-8.com/images/html/advanced/main_logo.png">
-      </div>
-      <span class="fa fa-bars menu-icon"></span>
-      <div class="header-right">
-        <a href="#">レッスン</a>
-        <a href="#">新規登録</a>
-        <a href="#" class="login">ログイン</a>
-      </div>
-    </div>
+    <h1>ふたり割り勘ノート</h1>
+    <p>ふたりの支払いと立替、清算までをまとめて管理します。</p>
   </header>
-  <div class="top-wrapper">
-    <div class="container">
-      <h1>LEARN TO CODE.<br>LEARN TO BE CREATIVE.</h1>
-      <p>Progateはオンラインプログラミング学習サービスです。<br>初心者にもやさしいスライドとレッスンで、ウェブサービスを作りながらプログラミングを学んでいきましょう。</p>
-      <div class="btn-wrapper">
-        <a href="#" class="btn signup">新規登録はこちら</a>
-        <p>or</p>
-        <a href="#" class="btn facebook"><span class="fa fa-facebook"></span>Facebookで登録</a>
-        <a href="#" class="btn twitter"><span class="fa fa-twitter"></span>Twitterで登録</a>
+  <main>
+    <section class="grid grid-3">
+      <div class="card">
+        <div class="badge" id="overallBadge">全期間</div>
+        <h2>全体の清算目安</h2>
+        <div class="summary-value" id="overallSummary">0円</div>
+        <p class="muted" id="overallDetail">現在は同額です。</p>
       </div>
-    </div>
-  </div>
-  <div class="lesson-wrapper">
-    <div class="container">
-      <div class="heading">
-        <h2>Learn Where to Get Started!</h2>
+      <div class="card">
+        <div class="badge" id="monthBadge">今月</div>
+        <h2>月別の清算目安</h2>
+        <div class="summary-value" id="monthSummary">0円</div>
+        <p class="muted" id="monthDetail">今月も同額です。</p>
+        <label>
+          対象月
+          <input type="month" id="monthPicker">
+        </label>
       </div>
-      <div class="lessons">
-        <div class="lesson">
-          <div class="lesson-icon">
-            <img src="https://prog-8.com/images/html/advanced/html.png">
-            <p>HTML & CSS</p>
-          </div>
-          <p class="text-contents">ウェブページの作成に使用される言語です。HTMLとCSSを組み合わせることで、静的なページを作り上げることができます。</p>
+      <div class="card">
+        <div class="badge">家賃も含めて計算</div>
+        <h2>あなたが彼女の分として立て替えた合計</h2>
+        <div class="summary-value" id="youFronted">0円</div>
+        <p class="muted">家賃12万円など、あなたが彼女の分を払った金額です。</p>
+      </div>
+    </section>
+
+    <section class="card" style="margin-top: 20px;">
+      <h2>支払いデータを追加</h2>
+      <form id="expenseForm">
+        <div class="row">
+          <label>
+            名称
+            <input type="text" id="expenseName" required placeholder="テレビ、外食など">
+          </label>
+          <label>
+            日付
+            <input type="date" id="expenseDate" required>
+          </label>
+          <label>
+            プリセット
+            <select id="presetSelect">
+              <option value="">選択なし</option>
+            </select>
+          </label>
         </div>
-        <div class="lesson">
-          <div class="lesson-icon">
-            <img src="https://prog-8.com/images/html/advanced/jQuery.png">
-            <p>jQuery</p>
-          </div>
-          <p class="text-contents">素敵な動きを手軽に実装できるJavaScriptライブラリです。 アニメーション効果をつけたり、Ajax（エイジャックス）を使って外部ファイルを読み込んだりと色々なことができます。</p>
+        <div class="row">
+          <label>
+            あなたの負担額
+            <input type="number" id="myShare" min="0" value="0">
+          </label>
+          <label>
+            彼女の負担額
+            <input type="number" id="herShare" min="0" value="0">
+          </label>
+          <label>
+            あなたが支払った額
+            <input type="number" id="myPaid" min="0" value="0">
+          </label>
+          <label>
+            彼女が支払った額
+            <input type="number" id="herPaid" min="0" value="0">
+          </label>
         </div>
-        <div class="lesson">
-          <div class="lesson-icon">
-            <img src="https://prog-8.com/images/html/advanced/ruby.png">
-            <p>Ruby</p>
-          </div>
-          <p class="text-contents">オープンソースの動的なプログラミング言語で、 シンプルさと高い生産性を備えています。大きなWebアプリケーションから小さな日用ツールまで、さまざまなソフトウェアを作ることができます。</p>
+        <label>
+          メモ
+          <textarea id="expenseNote" placeholder="例: 家賃は毎月あなたが支払い"></textarea>
+        </label>
+        <div class="actions">
+          <button class="primary" type="submit" id="saveExpense">追加する</button>
+          <button class="ghost" type="button" id="resetForm">フォームをリセット</button>
+          <span class="muted" id="editingHint"></span>
         </div>
-        <div class="lesson">
-          <div class="lesson-icon">
-            <img src="https://prog-8.com/images/html/advanced/php.png">
-            <p>PHP</p>
-          </div>
-          <p class="text-contents">HTMLだけではページの内容を変えることはできません。PHPはHTMLにプログラムを埋め込み、それを可能にします。</p>
+      </form>
+    </section>
+
+    <section class="card" style="margin-top: 20px;">
+      <h2>支払い一覧</h2>
+      <div class="notice">行を編集すると、過去の名前や日付、金額を変更できます。</div>
+      <table class="table" id="expenseTable">
+        <thead>
+          <tr>
+            <th>日付</th>
+            <th>名称</th>
+            <th class="right">合計</th>
+            <th class="right">あなた負担</th>
+            <th class="right">彼女負担</th>
+            <th class="right">あなた支払</th>
+            <th class="right">彼女支払</th>
+            <th class="right">差額</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section class="card" style="margin-top: 20px;">
+      <h2>プリセット（家賃や固定費）</h2>
+      <form id="presetForm">
+        <div class="row">
+          <label>
+            プリセット名
+            <input type="text" id="presetName" placeholder="家賃" required>
+          </label>
+          <label>
+            あなたの負担額
+            <input type="number" id="presetMyShare" min="0" value="0">
+          </label>
+          <label>
+            彼女の負担額
+            <input type="number" id="presetHerShare" min="0" value="120000">
+          </label>
+          <label>
+            あなたが支払った額
+            <input type="number" id="presetMyPaid" min="0" value="120000">
+          </label>
+          <label>
+            彼女が支払った額
+            <input type="number" id="presetHerPaid" min="0" value="0">
+          </label>
+        </div>
+        <div class="actions">
+          <button class="primary" type="submit">プリセット保存</button>
+          <button class="ghost" type="button" id="resetPresetForm">フォームをリセット</button>
+          <span class="muted" id="presetHint"></span>
+        </div>
+      </form>
+      <table class="table" id="presetTable" style="margin-top: 12px;">
+        <thead>
+          <tr>
+            <th>名称</th>
+            <th class="right">あなた負担</th>
+            <th class="right">彼女負担</th>
+            <th class="right">あなた支払</th>
+            <th class="right">彼女支払</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section class="card" style="margin-top: 20px;">
+      <h2>清算・リセット</h2>
+      <div class="row">
+        <label>
+          清算した金額（あなた→彼女はマイナス、彼女→あなたはプラス）
+          <input type="number" id="settlementAmount" value="0">
+        </label>
+        <label>
+          清算メモ
+          <input type="text" id="settlementNote" placeholder="例: 2024/11分をまとめて清算">
+        </label>
+      </div>
+      <div class="actions">
+        <button class="danger" id="resetAll">清算してリセット</button>
+        <div class="undo" id="undoReset">
+          <span>リセットを取り消しできます。</span>
+          <button class="ghost" id="undoButton">取り消す</button>
         </div>
       </div>
-      <div class="clear"></div>
-    </div>
-  </div>
-  <div class="message-wrapper">
-    <div class="container">
-      <div class="heading">
-        <h2>さぁ、あなたもProgateでプログラミングを学んでみませんか?</h2>
-        <h3>Let's learn to code, learn to be creative!</h3>
+      <div class="notice">「清算してリセット」を押すと支払い一覧は空になりますが、取り消しで元に戻せます。</div>
+      <h3 style="margin-top: 16px;">清算履歴</h3>
+      <table class="table" id="settlementTable">
+        <thead>
+          <tr>
+            <th>日付</th>
+            <th class="right">清算金額</th>
+            <th>メモ</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section class="card" style="margin-top: 20px;">
+      <h2>LINEで共有</h2>
+      <p class="muted">公開URLをここに入れてLINEで送ると、スマホからそのまま開けます。</p>
+      <div class="share-box">
+        <input type="text" id="shareUrl" placeholder="https://masakasakasama.github.io/ など">
+        <button class="ghost" id="usePublishedUrl">公開URLを推定</button>
+        <button class="ghost" id="useCurrentUrl">今開いているURLを入れる</button>
+        <button class="ghost" id="copyUrl">URLをコピー</button>
+        <button class="success" id="shareLine">LINEで共有</button>
       </div>
-      <span class="btn message">さっそく開発する</span>
-    </div>
-  </div>
-  <footer>
-    <div class="container">
-      <img src="https://prog-8.com/images/html/advanced/footer_logo.png">
-      <p>Learn to Code, Learn to be Creative.</p>
-    </div>
-  </footer>
+      <p class="muted" id="shareHint"></p>
+    </section>
+  </main>
+
+  <script>
+    const STORAGE_KEY = "split-notebook-data-v1";
+    const defaultState = {
+      expenses: [],
+      presets: [
+        {
+          id: crypto.randomUUID(),
+          name: "家賃",
+          myShare: 0,
+          herShare: 120000,
+          myPaid: 120000,
+          herPaid: 0
+        }
+      ],
+      settlements: [],
+      lastReset: null
+    };
+
+    const state = loadState();
+
+    const elements = {
+      overallSummary: document.getElementById("overallSummary"),
+      overallDetail: document.getElementById("overallDetail"),
+      monthSummary: document.getElementById("monthSummary"),
+      monthDetail: document.getElementById("monthDetail"),
+      youFronted: document.getElementById("youFronted"),
+      monthPicker: document.getElementById("monthPicker"),
+      expenseForm: document.getElementById("expenseForm"),
+      presetForm: document.getElementById("presetForm"),
+      expenseTable: document.getElementById("expenseTable").querySelector("tbody"),
+      presetTable: document.getElementById("presetTable").querySelector("tbody"),
+      settlementTable: document.getElementById("settlementTable").querySelector("tbody"),
+      presetSelect: document.getElementById("presetSelect"),
+      editingHint: document.getElementById("editingHint"),
+      presetHint: document.getElementById("presetHint"),
+      resetForm: document.getElementById("resetForm"),
+      resetPresetForm: document.getElementById("resetPresetForm"),
+      resetAll: document.getElementById("resetAll"),
+      settlementAmount: document.getElementById("settlementAmount"),
+      settlementNote: document.getElementById("settlementNote"),
+      undoReset: document.getElementById("undoReset"),
+      undoButton: document.getElementById("undoButton"),
+      shareUrl: document.getElementById("shareUrl"),
+      usePublishedUrl: document.getElementById("usePublishedUrl"),
+      useCurrentUrl: document.getElementById("useCurrentUrl"),
+      copyUrl: document.getElementById("copyUrl"),
+      shareLine: document.getElementById("shareLine"),
+      shareHint: document.getElementById("shareHint")
+    };
+
+    let editingExpenseId = null;
+    let editingPresetId = null;
+
+    setShareUrlFromLocation();
+
+    elements.monthPicker.value = new Date().toISOString().slice(0, 7);
+
+    function loadState() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return structuredClone(defaultState);
+      try {
+        const parsed = JSON.parse(raw);
+        return {
+          expenses: parsed.expenses || [],
+          presets: parsed.presets?.length ? parsed.presets : structuredClone(defaultState.presets),
+          settlements: parsed.settlements || [],
+          lastReset: parsed.lastReset || null
+        };
+      } catch (error) {
+        return structuredClone(defaultState);
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function formatYen(value) {
+      return `${value.toLocaleString("ja-JP")}円`;
+    }
+
+    function calcBalance(expense) {
+      return expense.myPaid - expense.myShare;
+    }
+
+    function calcTotal(expense) {
+      return expense.myShare + expense.herShare;
+    }
+
+    function renderSummaries() {
+      const overallBalance = state.expenses.reduce((sum, expense) => sum + calcBalance(expense), 0);
+      const overallText = balanceText(overallBalance);
+      elements.overallSummary.textContent = overallText.title;
+      elements.overallDetail.textContent = overallText.detail;
+
+      const selectedMonth = elements.monthPicker.value;
+      const monthlyExpenses = state.expenses.filter((expense) => expense.date.startsWith(selectedMonth));
+      const monthBalance = monthlyExpenses.reduce((sum, expense) => sum + calcBalance(expense), 0);
+      const monthText = balanceText(monthBalance, "今月");
+      elements.monthSummary.textContent = monthText.title;
+      elements.monthDetail.textContent = monthText.detail;
+
+      const fronted = state.expenses
+        .filter((expense) => expense.herShare > 0)
+        .reduce((sum, expense) => sum + Math.max(expense.myPaid - expense.myShare, 0), 0);
+      elements.youFronted.textContent = formatYen(fronted);
+    }
+
+    function balanceText(balance, label = "現在") {
+      if (balance > 0) {
+        return {
+          title: `${formatYen(balance)} 彼女→あなた`,
+          detail: `${label}はあなたが多めに支払っています。`
+        };
+      }
+      if (balance < 0) {
+        return {
+          title: `${formatYen(Math.abs(balance))} あなた→彼女`,
+          detail: `${label}は彼女が多めに支払っています。`
+        };
+      }
+      return {
+        title: "0円",
+        detail: `${label}は同額です。`
+      };
+    }
+
+    function renderExpenses() {
+      elements.expenseTable.innerHTML = "";
+      const sorted = [...state.expenses].sort((a, b) => b.date.localeCompare(a.date));
+      sorted.forEach((expense) => {
+        const row = document.createElement("tr");
+        const balance = calcBalance(expense);
+        const balanceLabel = balance === 0 ? "0" : balance > 0 ? `+${balance}` : `${balance}`;
+        row.innerHTML = `
+          <td>${expense.date}</td>
+          <td>
+            <div class="stack">
+              <span>${expense.name}</span>
+              ${expense.note ? `<span class="muted">${expense.note}</span>` : ""}
+            </div>
+          </td>
+          <td class="right">${formatYen(calcTotal(expense))}</td>
+          <td class="right">${formatYen(expense.myShare)}</td>
+          <td class="right">${formatYen(expense.herShare)}</td>
+          <td class="right">${formatYen(expense.myPaid)}</td>
+          <td class="right">${formatYen(expense.herPaid)}</td>
+          <td class="right"><span class="pill">${formatYen(Math.abs(balance))} ${balance >= 0 ? "彼女→あなた" : "あなた→彼女"}</span></td>
+          <td>
+            <button class="ghost" data-action="edit" data-id="${expense.id}">編集</button>
+            <button class="ghost" data-action="delete" data-id="${expense.id}">削除</button>
+          </td>
+        `;
+        elements.expenseTable.appendChild(row);
+      });
+      if (!sorted.length) {
+        const row = document.createElement("tr");
+        row.innerHTML = `<td colspan="9" class="muted">まだデータがありません。</td>`;
+        elements.expenseTable.appendChild(row);
+      }
+    }
+
+    function renderPresets() {
+      elements.presetTable.innerHTML = "";
+      elements.presetSelect.innerHTML = '<option value="">選択なし</option>';
+
+      state.presets.forEach((preset) => {
+        const option = document.createElement("option");
+        option.value = preset.id;
+        option.textContent = preset.name;
+        elements.presetSelect.appendChild(option);
+
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${preset.name}</td>
+          <td class="right">${formatYen(preset.myShare)}</td>
+          <td class="right">${formatYen(preset.herShare)}</td>
+          <td class="right">${formatYen(preset.myPaid)}</td>
+          <td class="right">${formatYen(preset.herPaid)}</td>
+          <td>
+            <button class="ghost" data-action="preset-edit" data-id="${preset.id}">編集</button>
+            <button class="ghost" data-action="preset-delete" data-id="${preset.id}">削除</button>
+          </td>
+        `;
+        elements.presetTable.appendChild(row);
+      });
+
+      if (!state.presets.length) {
+        const row = document.createElement("tr");
+        row.innerHTML = `<td colspan="6" class="muted">プリセットがありません。</td>`;
+        elements.presetTable.appendChild(row);
+      }
+    }
+
+    function renderSettlements() {
+      elements.settlementTable.innerHTML = "";
+      const sorted = [...state.settlements].sort((a, b) => b.date.localeCompare(a.date));
+      sorted.forEach((settlement) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${settlement.date}</td>
+          <td class="right">${formatYen(settlement.amount)}</td>
+          <td>${settlement.note || ""}</td>
+        `;
+        elements.settlementTable.appendChild(row);
+      });
+      if (!sorted.length) {
+        const row = document.createElement("tr");
+        row.innerHTML = `<td colspan="3" class="muted">清算履歴はまだありません。</td>`;
+        elements.settlementTable.appendChild(row);
+      }
+    }
+
+    function hydrateExpenseForm(expense) {
+      document.getElementById("expenseName").value = expense.name;
+      document.getElementById("expenseDate").value = expense.date;
+      document.getElementById("myShare").value = expense.myShare;
+      document.getElementById("herShare").value = expense.herShare;
+      document.getElementById("myPaid").value = expense.myPaid;
+      document.getElementById("herPaid").value = expense.herPaid;
+      document.getElementById("expenseNote").value = expense.note || "";
+    }
+
+    function resetExpenseForm() {
+      elements.expenseForm.reset();
+      document.getElementById("expenseDate").valueAsDate = new Date();
+      document.getElementById("myShare").value = 0;
+      document.getElementById("herShare").value = 0;
+      document.getElementById("myPaid").value = 0;
+      document.getElementById("herPaid").value = 0;
+      document.getElementById("expenseNote").value = "";
+      editingExpenseId = null;
+      elements.editingHint.textContent = "";
+      elements.presetSelect.value = "";
+      setShareUrlFromLocation();
+    }
+
+    function resetPresetForm() {
+      elements.presetForm.reset();
+      document.getElementById("presetMyShare").value = 0;
+      document.getElementById("presetHerShare").value = 120000;
+      document.getElementById("presetMyPaid").value = 120000;
+      document.getElementById("presetHerPaid").value = 0;
+      editingPresetId = null;
+      elements.presetHint.textContent = "";
+    }
+
+    function updateUndoState() {
+      if (state.lastReset) {
+        elements.undoReset.classList.add("active");
+      } else {
+        elements.undoReset.classList.remove("active");
+      }
+    }
+
+    function renderAll() {
+      renderSummaries();
+      renderExpenses();
+      renderPresets();
+      renderSettlements();
+      updateUndoState();
+      saveState();
+    }
+
+    elements.expenseForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const expense = {
+        id: editingExpenseId || crypto.randomUUID(),
+        name: document.getElementById("expenseName").value.trim(),
+        date: document.getElementById("expenseDate").value,
+        myShare: Number(document.getElementById("myShare").value || 0),
+        herShare: Number(document.getElementById("herShare").value || 0),
+        myPaid: Number(document.getElementById("myPaid").value || 0),
+        herPaid: Number(document.getElementById("herPaid").value || 0),
+        note: document.getElementById("expenseNote").value.trim()
+      };
+      if (!expense.name || !expense.date) return;
+
+      if (editingExpenseId) {
+        const index = state.expenses.findIndex((item) => item.id === editingExpenseId);
+        state.expenses[index] = expense;
+      } else {
+        state.expenses.push(expense);
+      }
+
+      resetExpenseForm();
+      renderAll();
+    });
+
+    elements.expenseTable.addEventListener("click", (event) => {
+      const button = event.target.closest("button");
+      if (!button) return;
+      const { action, id } = button.dataset;
+      const expense = state.expenses.find((item) => item.id === id);
+      if (!expense) return;
+      if (action === "edit") {
+        editingExpenseId = id;
+        hydrateExpenseForm(expense);
+        elements.editingHint.textContent = `編集中: ${expense.name}`;
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+      if (action === "delete") {
+        state.expenses = state.expenses.filter((item) => item.id !== id);
+        renderAll();
+      }
+    });
+
+    elements.presetSelect.addEventListener("change", (event) => {
+      const preset = state.presets.find((item) => item.id === event.target.value);
+      if (!preset) return;
+      document.getElementById("expenseName").value = preset.name;
+      document.getElementById("myShare").value = preset.myShare;
+      document.getElementById("herShare").value = preset.herShare;
+      document.getElementById("myPaid").value = preset.myPaid;
+      document.getElementById("herPaid").value = preset.herPaid;
+    });
+
+    elements.presetForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const preset = {
+        id: editingPresetId || crypto.randomUUID(),
+        name: document.getElementById("presetName").value.trim(),
+        myShare: Number(document.getElementById("presetMyShare").value || 0),
+        herShare: Number(document.getElementById("presetHerShare").value || 0),
+        myPaid: Number(document.getElementById("presetMyPaid").value || 0),
+        herPaid: Number(document.getElementById("presetHerPaid").value || 0)
+      };
+      if (!preset.name) return;
+
+      if (editingPresetId) {
+        const index = state.presets.findIndex((item) => item.id === editingPresetId);
+        state.presets[index] = preset;
+      } else {
+        state.presets.push(preset);
+      }
+      resetPresetForm();
+      renderAll();
+    });
+
+    elements.presetTable.addEventListener("click", (event) => {
+      const button = event.target.closest("button");
+      if (!button) return;
+      const { action, id } = button.dataset;
+      const preset = state.presets.find((item) => item.id === id);
+      if (!preset) return;
+      if (action === "preset-edit") {
+        editingPresetId = id;
+        document.getElementById("presetName").value = preset.name;
+        document.getElementById("presetMyShare").value = preset.myShare;
+        document.getElementById("presetHerShare").value = preset.herShare;
+        document.getElementById("presetMyPaid").value = preset.myPaid;
+        document.getElementById("presetHerPaid").value = preset.herPaid;
+        elements.presetHint.textContent = `編集中: ${preset.name}`;
+        window.scrollTo({ top: elements.presetForm.offsetTop - 80, behavior: "smooth" });
+      }
+      if (action === "preset-delete") {
+        state.presets = state.presets.filter((item) => item.id !== id);
+        renderAll();
+      }
+    });
+
+    elements.resetForm.addEventListener("click", resetExpenseForm);
+    elements.resetPresetForm.addEventListener("click", resetPresetForm);
+
+    elements.monthPicker.addEventListener("change", renderAll);
+
+    elements.resetAll.addEventListener("click", () => {
+      state.lastReset = {
+        expenses: structuredClone(state.expenses),
+        settlements: structuredClone(state.settlements)
+      };
+      const settlement = {
+        id: crypto.randomUUID(),
+        date: new Date().toISOString().slice(0, 10),
+        amount: Number(elements.settlementAmount.value || 0),
+        note: elements.settlementNote.value.trim()
+      };
+      state.settlements.push(settlement);
+      state.expenses = [];
+      elements.settlementAmount.value = 0;
+      elements.settlementNote.value = "";
+      renderAll();
+    });
+
+    elements.undoButton.addEventListener("click", () => {
+      if (!state.lastReset) return;
+      state.expenses = state.lastReset.expenses;
+      state.settlements = state.lastReset.settlements;
+      state.lastReset = null;
+      renderAll();
+    });
+
+    elements.copyUrl.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(elements.shareUrl.value);
+        elements.copyUrl.textContent = "コピーしました";
+        setTimeout(() => (elements.copyUrl.textContent = "URLをコピー"), 1500);
+      } catch (error) {
+        elements.copyUrl.textContent = "コピー失敗";
+      }
+    });
+
+    elements.shareLine.addEventListener("click", () => {
+      const urlValue = elements.shareUrl.value.trim();
+      if (!urlValue) return;
+      if (urlValue.startsWith("file://")) {
+        elements.shareHint.textContent =
+          "file:// からは共有できません。公開URLを入力してから共有してください。";
+        return;
+      }
+      if (urlValue.includes("github.com") && !urlValue.includes("github.io")) {
+        elements.shareHint.textContent =
+          "GitHubの画面URLではなく、公開ページのURL（github.io）を共有してください。";
+        return;
+      }
+      const url = encodeURIComponent(urlValue);
+      window.open(`https://social-plugins.line.me/lineit/share?url=${url}`, "_blank");
+    });
+
+    document.getElementById("expenseDate").valueAsDate = new Date();
+
+    renderAll();
+
+    function setShareUrlFromLocation() {
+      const published = guessPublishedUrl();
+      if (published) {
+        elements.shareUrl.value = published;
+        elements.shareHint.textContent =
+          "GitHubの画面から開いているため、公開URLを推定して入力しました。";
+        return;
+      }
+      const current = window.location.href;
+      elements.shareUrl.value = current;
+      if (current.startsWith("file://")) {
+        elements.shareHint.textContent =
+          "ファイルを直接開いている場合は共有URLが作れません。公開URLを入力してください。";
+      } else {
+        elements.shareHint.textContent = "";
+      }
+    }
+
+    function guessPublishedUrl() {
+      if (window.location.hostname !== "github.com") return "";
+      const parts = window.location.pathname.split("/").filter(Boolean);
+      const owner = parts[0];
+      const repo = parts[1];
+      if (!owner || !repo) return "";
+      if (repo.endsWith(".github.io")) {
+        return `https://${owner}.github.io/`;
+      }
+      return `https://${owner}.github.io/${repo}/`;
+    }
+
+    elements.usePublishedUrl.addEventListener("click", () => {
+      const published = guessPublishedUrl();
+      if (published) {
+        elements.shareUrl.value = published;
+        elements.shareHint.textContent = "公開URLを推定して入力しました。";
+      } else {
+        elements.shareHint.textContent =
+          "公開URLを推定できませんでした。公開URLを手入力してください。";
+      }
+    });
+
+    elements.useCurrentUrl.addEventListener("click", () => {
+      elements.shareUrl.value = window.location.href;
+      if (elements.shareUrl.value.startsWith("file://")) {
+        elements.shareHint.textContent =
+          "file:// からは共有できません。公開URLを入力してから共有してください。";
+      } else {
+        elements.shareHint.textContent = "";
+      }
+    });
+  </script>
 </body>
 </html>
