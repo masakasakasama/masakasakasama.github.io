@@ -1,90 +1,341 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Progate</title>
-  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-  <link rel="stylesheet" type="text/css" href="stylesheet.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Easy English News | BBC + NPR</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --text: #1f2a37;
+      --muted: #5b6675;
+      --primary: #1f7ae0;
+      --primary-dark: #0d4c97;
+      --border: #dbe3ee;
+      --ok: #117a3b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans JP", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .app {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 12px;
+    }
+    header {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+      margin-bottom: 12px;
+      position: sticky;
+      top: 8px;
+      z-index: 10;
+    }
+    h1 { margin: 0; font-size: 1.2rem; }
+    .sub { color: var(--muted); font-size: .85rem; }
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    button, select {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #fff;
+      padding: 10px;
+      font-size: .95rem;
+    }
+    button.primary { background: var(--primary); color: #fff; border-color: var(--primary); }
+    button.primary:active { background: var(--primary-dark); }
+    .columns { display: grid; gap: 12px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+    }
+    .news-item { padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .news-item:last-child { border-bottom: none; }
+    .meta { color: var(--muted); font-size: .82rem; }
+    .news-item h3 { font-size: 1rem; margin: 0 0 4px; }
+    .chip-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+    .chip {
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: .8rem;
+      background: #fff;
+      cursor: pointer;
+    }
+    .reader {
+      font-size: 1.02rem;
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      background: #fbfdff;
+      user-select: text;
+    }
+    .reader .word { cursor: pointer; }
+    .reader .word:hover { background: #e6f0ff; }
+    .saved { color: var(--ok); font-weight: 600; font-size: .85rem; }
+    .modal {
+      position: fixed; inset: 0; background: rgba(0,0,0,.42);
+      display: none; align-items: center; justify-content: center; padding: 14px;
+    }
+    .modal.show { display: flex; }
+    .modal-body {
+      width: min(640px, 100%);
+      max-height: 82vh;
+      overflow: auto;
+      background: #fff;
+      border-radius: 14px;
+      padding: 14px;
+    }
+    .selection-tts {
+      position: fixed; bottom: 12px; right: 12px; z-index: 20;
+      display: none;
+    }
+    .selection-tts.show { display: block; }
+    @media (min-width: 840px) {
+      .toolbar { grid-template-columns: repeat(4, 1fr); }
+      .columns { grid-template-columns: 1.4fr .9fr; }
+      h1 { font-size: 1.5rem; }
+    }
+  </style>
 </head>
 <body>
-  <header>
-    <div class="container">
-      <div class="header-left">
-        <img class="logo" src="https://prog-8.com/images/html/advanced/main_logo.png">
+  <main class="app">
+    <header>
+      <h1>Easy English News</h1>
+      <div class="sub">BBC + NPR / モバイル優先（Chrome想定）/ 単語タップで意味・例文・発音</div>
+      <div class="toolbar">
+        <button class="primary" id="refreshBtn">最新ニュース取得</button>
+        <select id="sourceFilter">
+          <option value="all">すべて</option>
+          <option value="BBC">BBC News</option>
+          <option value="NPR">NPR</option>
+        </select>
+        <button id="archiveBtn">日別アーカイブ</button>
+        <button id="savedBtn">保存一覧</button>
       </div>
-      <span class="fa fa-bars menu-icon"></span>
-      <div class="header-right">
-        <a href="#">レッスン</a>
-        <a href="#">新規登録</a>
-        <a href="#" class="login">ログイン</a>
-      </div>
-    </div>
-  </header>
-  <div class="top-wrapper">
-    <div class="container">
-      <h1>LEARN TO CODE.<br>LEARN TO BE CREATIVE.</h1>
-      <p>Progateはオンラインプログラミング学習サービスです。<br>初心者にもやさしいスライドとレッスンで、ウェブサービスを作りながらプログラミングを学んでいきましょう。</p>
-      <div class="btn-wrapper">
-        <a href="#" class="btn signup">新規登録はこちら</a>
-        <p>or</p>
-        <a href="#" class="btn facebook"><span class="fa fa-facebook"></span>Facebookで登録</a>
-        <a href="#" class="btn twitter"><span class="fa fa-twitter"></span>Twitterで登録</a>
-      </div>
-    </div>
+    </header>
+
+    <section class="columns">
+      <article class="card">
+        <h2 style="margin-top:0">ニュース一覧</h2>
+        <div id="status" class="meta">読み込み中...</div>
+        <div id="newsList"></div>
+      </article>
+
+      <aside class="card">
+        <h2 style="margin-top:0">学習リーダー</h2>
+        <div id="readerTitle" class="meta">記事を選んでください</div>
+        <div id="reader" class="reader">ここに本文/要約を表示します。単語をタップすると意味を確認できます。</div>
+      </aside>
+    </section>
+  </main>
+
+  <button class="primary selection-tts" id="speakSelectionBtn">選択範囲を読み上げ</button>
+
+  <div class="modal" id="modal">
+    <div class="modal-body" id="modalBody"></div>
   </div>
-  <div class="lesson-wrapper">
-    <div class="container">
-      <div class="heading">
-        <h2>Learn Where to Get Started!</h2>
-      </div>
-      <div class="lessons">
-        <div class="lesson">
-          <div class="lesson-icon">
-            <img src="https://prog-8.com/images/html/advanced/html.png">
-            <p>HTML & CSS</p>
+
+  <script>
+    const feeds = {
+      BBC: 'http://feeds.bbci.co.uk/news/world/rss.xml',
+      NPR: 'https://feeds.npr.org/1001/rss.xml'
+    };
+
+    const apiWrap = (url) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+
+    const state = {
+      news: [],
+      selected: null,
+      savedNews: JSON.parse(localStorage.getItem('savedNews') || '[]'),
+      savedWords: JSON.parse(localStorage.getItem('savedWords') || '[]'),
+      archive: JSON.parse(localStorage.getItem('newsArchive') || '{}')
+    };
+
+    const els = {
+      newsList: document.getElementById('newsList'),
+      status: document.getElementById('status'),
+      reader: document.getElementById('reader'),
+      readerTitle: document.getElementById('readerTitle'),
+      refreshBtn: document.getElementById('refreshBtn'),
+      sourceFilter: document.getElementById('sourceFilter'),
+      archiveBtn: document.getElementById('archiveBtn'),
+      savedBtn: document.getElementById('savedBtn'),
+      modal: document.getElementById('modal'),
+      modalBody: document.getElementById('modalBody'),
+      speakSelectionBtn: document.getElementById('speakSelectionBtn')
+    };
+
+    const todayKey = () => new Date().toISOString().slice(0, 10);
+    const saveStore = () => {
+      localStorage.setItem('savedNews', JSON.stringify(state.savedNews));
+      localStorage.setItem('savedWords', JSON.stringify(state.savedWords));
+      localStorage.setItem('newsArchive', JSON.stringify(state.archive));
+    };
+
+    function parseRSS(text, sourceName) {
+      const doc = new DOMParser().parseFromString(text, 'application/xml');
+      return [...doc.querySelectorAll('item')].slice(0, 20).map(item => ({
+        source: sourceName,
+        title: item.querySelector('title')?.textContent || 'No title',
+        link: item.querySelector('link')?.textContent || '#',
+        pubDate: item.querySelector('pubDate')?.textContent || '',
+        description: (item.querySelector('description')?.textContent || '').replace(/<[^>]*>/g, '')
+      }));
+    }
+
+    async function fetchNews() {
+      els.status.textContent = '最新ニュースを取得中...';
+      try {
+        const [bbcRes, nprRes] = await Promise.all([
+          fetch(apiWrap(feeds.BBC)),
+          fetch(apiWrap(feeds.NPR))
+        ]);
+        const [bbcXml, nprXml] = await Promise.all([bbcRes.text(), nprRes.text()]);
+        const merged = [...parseRSS(bbcXml, 'BBC'), ...parseRSS(nprXml, 'NPR')]
+          .sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+        state.news = merged;
+        state.archive[todayKey()] = merged;
+        saveStore();
+        renderNews();
+        els.status.textContent = `${merged.length}件の記事を表示中（${new Date().toLocaleString()} 更新）`;
+      } catch (e) {
+        els.status.textContent = '取得に失敗。ネットワークやCORS制限の可能性があります。';
+      }
+    }
+
+    function renderNews() {
+      const f = els.sourceFilter.value;
+      const rows = state.news.filter(n => f === 'all' || n.source === f);
+      els.newsList.innerHTML = rows.map((n, i) => `
+        <div class="news-item">
+          <h3>${n.title}</h3>
+          <div class="meta">${n.source} / ${new Date(n.pubDate).toLocaleString()}</div>
+          <div class="chip-row">
+            <button class="chip" onclick="openReader(${i})">読む</button>
+            <a class="chip" target="_blank" href="${n.link}" rel="noopener noreferrer">原文</a>
+            <button class="chip" onclick="saveNews(${i})">記事保存</button>
           </div>
-          <p class="text-contents">ウェブページの作成に使用される言語です。HTMLとCSSを組み合わせることで、静的なページを作り上げることができます。</p>
         </div>
-        <div class="lesson">
-          <div class="lesson-icon">
-            <img src="https://prog-8.com/images/html/advanced/jQuery.png">
-            <p>jQuery</p>
+      `).join('');
+    }
+
+    function tokenize(text) {
+      return text.split(/(\s+|[,.!?;:"()\[\]{}])/).map(t => {
+        if (/^[A-Za-z][A-Za-z'-]*$/.test(t)) {
+          return `<span class="word" data-word="${t.toLowerCase()}">${t}</span>`;
+        }
+        return t;
+      }).join('');
+    }
+
+    window.openReader = function(i) {
+      const item = state.news.filter(n => els.sourceFilter.value === 'all' || n.source === els.sourceFilter.value)[i];
+      if (!item) return;
+      state.selected = item;
+      els.readerTitle.textContent = `${item.title} (${item.source})`;
+      els.reader.innerHTML = tokenize(item.description || item.title);
+    };
+
+    window.saveNews = function(i) {
+      const item = state.news.filter(n => els.sourceFilter.value === 'all' || n.source === els.sourceFilter.value)[i];
+      if (!item) return;
+      if (!state.savedNews.some(s => s.link === item.link)) state.savedNews.push(item);
+      saveStore();
+      els.status.innerHTML = `<span class="saved">記事を保存しました。</span>`;
+    };
+
+    async function lookupWord(word) {
+      const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`);
+      if (!res.ok) throw new Error('not found');
+      return res.json();
+    }
+
+    function speak(text) {
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'en-US';
+      speechSynthesis.cancel();
+      speechSynthesis.speak(u);
+    }
+
+    els.reader.addEventListener('click', async (e) => {
+      const t = e.target;
+      if (!t.classList.contains('word')) return;
+      const w = t.dataset.word;
+      speak(w);
+      try {
+        const data = await lookupWord(w);
+        const first = data?.[0]?.meanings?.[0];
+        const def = first?.definitions?.[0]?.definition || '定義なし';
+        const ex = first?.definitions?.[0]?.example || '例文なし';
+        els.modalBody.innerHTML = `
+          <h3>${w}</h3>
+          <p><b>意味:</b> ${def}</p>
+          <p><b>例文:</b> ${ex}</p>
+          <div class="chip-row">
+            <button class="chip" onclick="saveWord('${w.replace("'", "\\'")}')">単語保存</button>
+            <button class="chip" onclick="speak('${w.replace("'", "\\'")}')">再生</button>
           </div>
-          <p class="text-contents">素敵な動きを手軽に実装できるJavaScriptライブラリです。 アニメーション効果をつけたり、Ajax（エイジャックス）を使って外部ファイルを読み込んだりと色々なことができます。</p>
-        </div>
-        <div class="lesson">
-          <div class="lesson-icon">
-            <img src="https://prog-8.com/images/html/advanced/ruby.png">
-            <p>Ruby</p>
-          </div>
-          <p class="text-contents">オープンソースの動的なプログラミング言語で、 シンプルさと高い生産性を備えています。大きなWebアプリケーションから小さな日用ツールまで、さまざまなソフトウェアを作ることができます。</p>
-        </div>
-        <div class="lesson">
-          <div class="lesson-icon">
-            <img src="https://prog-8.com/images/html/advanced/php.png">
-            <p>PHP</p>
-          </div>
-          <p class="text-contents">HTMLだけではページの内容を変えることはできません。PHPはHTMLにプログラムを埋め込み、それを可能にします。</p>
-        </div>
-      </div>
-      <div class="clear"></div>
-    </div>
-  </div>
-  <div class="message-wrapper">
-    <div class="container">
-      <div class="heading">
-        <h2>さぁ、あなたもProgateでプログラミングを学んでみませんか?</h2>
-        <h3>Let's learn to code, learn to be creative!</h3>
-      </div>
-      <span class="btn message">さっそく開発する</span>
-    </div>
-  </div>
-  <footer>
-    <div class="container">
-      <img src="https://prog-8.com/images/html/advanced/footer_logo.png">
-      <p>Learn to Code, Learn to be Creative.</p>
-    </div>
-  </footer>
+          <p class="meta">辞書: dictionaryapi.dev</p>
+        `;
+      } catch {
+        els.modalBody.innerHTML = `<h3>${w}</h3><p>辞書情報が見つかりませんでした。</p>`;
+      }
+      els.modal.classList.add('show');
+    });
+
+    window.saveWord = function(word) {
+      if (!state.savedWords.includes(word)) state.savedWords.push(word);
+      saveStore();
+      els.modalBody.insertAdjacentHTML('beforeend', '<p class="saved">保存しました。</p>');
+    };
+    window.speak = speak;
+
+    els.modal.addEventListener('click', (e) => {
+      if (e.target === els.modal) els.modal.classList.remove('show');
+    });
+
+    document.addEventListener('selectionchange', () => {
+      const txt = window.getSelection().toString().trim();
+      els.speakSelectionBtn.classList.toggle('show', txt.length > 0);
+    });
+    els.speakSelectionBtn.addEventListener('click', () => {
+      const txt = window.getSelection().toString().trim();
+      if (txt) speak(txt);
+    });
+
+    els.refreshBtn.onclick = fetchNews;
+    els.sourceFilter.onchange = renderNews;
+    els.archiveBtn.onclick = () => {
+      const days = Object.keys(state.archive).sort().reverse();
+      els.modalBody.innerHTML = `<h3>日別アーカイブ</h3>` + days.map(d => `<p><b>${d}</b>: ${state.archive[d].length}件</p>`).join('');
+      els.modal.classList.add('show');
+    };
+    els.savedBtn.onclick = () => {
+      els.modalBody.innerHTML = `
+        <h3>保存一覧</h3>
+        <p><b>保存記事:</b> ${state.savedNews.length}件</p>
+        <ul>${state.savedNews.slice(0, 50).map(n => `<li><a target="_blank" href="${n.link}">${n.title}</a></li>`).join('')}</ul>
+        <p><b>保存単語:</b> ${state.savedWords.length}語</p>
+        <p>${state.savedWords.join(', ') || 'なし'}</p>
+      `;
+      els.modal.classList.add('show');
+    };
+
+    fetchNews();
+  </script>
 </body>
 </html>
