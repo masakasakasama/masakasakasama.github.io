@@ -3,377 +3,144 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#07070b">
+<meta name="theme-color" content="#07080d">
 <title>山崎翔とタスクの恋</title>
-<meta name="description" content="PM山崎翔になって、いさじ・横山・池田・川村へタスクを振り分ける短編フィクションゲーム">
+<meta name="description" content="PM山崎翔になって、いさじ・横山・池田・川村へタスクを振る3D短編ゲーム">
 <style>
-:root{
-  --bg:#06070b;--panel:#10121a;--panel2:#171a24;--line:#2d3140;--text:#f8f8fb;--muted:#9fa5b4;
-  --pink:#ff4d9d;--pink2:#ff8bc2;--cyan:#61d8ff;--green:#6de2a7;--orange:#ffb45e;--red:#ff687a;
-}
-*{box-sizing:border-box}
-html,body{margin:0;min-height:100%;background:radial-gradient(circle at 50% -15%,#31162c 0,#0a0b10 36%,#050507 100%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif}
-body{padding:max(14px,env(safe-area-inset-top)) 10px max(28px,env(safe-area-inset-bottom))}
-button{font:inherit}
-.app{width:min(100%,820px);margin:0 auto}
-.header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 3px 12px}
-.brand{font-size:12px;color:var(--muted);letter-spacing:.14em}
-.badge{font-size:11px;color:#e0dbe4;border:1px solid var(--line);padding:6px 9px;border-radius:999px;background:#0d0e14}
-.card{background:linear-gradient(180deg,rgba(22,24,34,.98),rgba(10,11,16,.98));border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:0 28px 80px rgba(0,0,0,.38)}
-.hero{position:relative;overflow:hidden;padding:18px}
-.gridlines{position:absolute;inset:0;opacity:.2;background-image:linear-gradient(rgba(255,255,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.07) 1px,transparent 1px);background-size:34px 34px;mask-image:linear-gradient(to bottom,black,transparent 80%)}
-.topline{position:relative;z-index:2;display:flex;justify-content:space-between;gap:10px;align-items:center;font-size:11px;color:var(--muted)}
-.cover{position:relative;z-index:2;margin-top:14px;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(180px,.85fr);gap:14px;align-items:stretch}
-.coverArt{min-height:360px;border:1px solid #3a2c3a;border-radius:20px;overflow:hidden;background:radial-gradient(circle at 55% 28%,rgba(255,77,157,.25),transparent 33%),linear-gradient(165deg,#171923,#0d0d13)}
-.coverCopy{display:flex;flex-direction:column;justify-content:center;padding:8px 4px}
-.title{font-size:clamp(36px,7vw,62px);line-height:.98;letter-spacing:-.05em;font-weight:900;text-shadow:0 0 26px rgba(255,77,157,.33)}
-.title .hot{color:var(--pink)}
-.subtitle{margin-top:11px;font-size:13px;color:#dad4de;line-height:1.65}
-.tagline{margin-top:18px;padding:12px 13px;border:1px solid #513148;border-radius:14px;background:rgba(12,9,13,.66);font-size:13px;line-height:1.7}
-.teamStrip{position:relative;z-index:2;margin-top:14px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.personCard{border:1px solid var(--line);border-radius:14px;background:#0d0f15;overflow:hidden;text-align:center}
-.personCard .portraitWrap{aspect-ratio:1/1;background:#12141c}
-.personCard svg{display:block;width:100%;height:100%}
-.personCard b{display:block;font-size:12px;padding:7px 4px 1px}
-.personCard span{display:block;font-size:9px;color:var(--muted);padding-bottom:7px}
-.actions{position:relative;z-index:2;margin-top:14px;display:grid;gap:9px}
-.primary,.ghost,.choice{width:100%;min-height:48px;border-radius:14px;border:1px solid transparent;cursor:pointer;transition:.17s ease}
-.primary{background:linear-gradient(180deg,#ff67ae,#e83f92);color:white;font-weight:800;box-shadow:0 0 25px rgba(255,77,157,.25)}
-.ghost{background:#12141c;color:#eeeaf0;border-color:#343846}
-.primary:active,.ghost:active,.choice:active{transform:scale(.986)}
-.game,.end{display:none}
-.status{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px 12px 0}
-.stat{padding:10px;border:1px solid var(--line);border-radius:13px;background:#0e1017}
-.statTop{display:flex;justify-content:space-between;gap:5px;font-size:10px;color:var(--muted)}
-.bar{height:6px;background:#252936;border-radius:999px;margin-top:7px;overflow:hidden}
-.fill{height:100%;border-radius:999px;transition:width .25s ease}
-.pm{background:var(--pink)}.quality{background:var(--green)}.risk{background:var(--red)}
-.gamebody{padding:14px}
-.dayrow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
-.day{font-size:12px;color:var(--muted)}
-.task{font-size:11px;padding:6px 9px;border:1px solid var(--line);border-radius:999px}
-.scenePanel{display:grid;grid-template-columns:minmax(150px,.85fr) minmax(0,1.15fr);gap:12px;align-items:center}
-.sceneImage{border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#0e1017;min-height:190px}
-.sceneImage svg{width:100%;height:100%;display:block}
-.speaker{display:flex;gap:10px;align-items:flex-start}
-.miniPortrait{width:64px;height:76px;border-radius:16px;overflow:hidden;border:1px solid #503449;flex:0 0 auto;background:#17141a}
-.miniPortrait svg{width:100%;height:100%;display:block}
-.name{font-size:16px;font-weight:800}.role{margin-top:3px;font-size:10px;color:var(--pink2);letter-spacing:.08em}
-.dialogue{margin-top:8px;font-size:14px;line-height:1.75;color:#e8e3ea}
-.quote{margin-top:12px;padding:13px;border-radius:14px;background:#090a0f;border:1px solid #4c3043;line-height:1.7;font-size:14px}
-.memberLoads{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:12px}
-.loadCard{border:1px solid var(--line);border-radius:13px;background:#0d0f15;padding:8px}
-.loadTop{display:flex;justify-content:space-between;gap:4px;font-size:10px}
-.loadTop b{font-size:11px}
-.loadCard .bar{margin-top:6px;height:5px}
-.loadFill{height:100%;border-radius:999px;background:var(--cyan);transition:.2s}
-.choices{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:12px}
-.choice{background:#171a24;color:#f5f1f6;border-color:#343846;text-align:left;padding:11px 12px;line-height:1.45}
-.choice small{display:block;margin-top:4px;color:var(--muted);font-size:10px}
-.choice.self{grid-column:1/-1;border-color:#4a3546}
-.resultNote{margin-top:10px;font-size:12px;color:#cfc8d2;line-height:1.6}
-.end{padding:20px 16px;text-align:center}
-.endVisual{width:min(100%,390px);margin:0 auto 12px;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:#0e1017}
-.endVisual svg{display:block;width:100%}
-.endTitle{font-size:25px;font-weight:900}
-.endText{margin:12px auto 0;max-width:560px;color:#ddd7e0;line-height:1.8;font-size:14px}
-.scorebox{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:18px 0}
-.score{border:1px solid var(--line);border-radius:12px;padding:10px;background:#0e1017}.score b{display:block;font-size:21px}.score span{font-size:10px;color:var(--muted)}
-.footer{display:flex;gap:8px}.footer button{flex:1}
-.disclaimer{margin:12px 4px 0;text-align:center;color:#7f8491;font-size:10px;line-height:1.55}
-.toast{position:fixed;left:50%;bottom:max(24px,env(safe-area-inset-bottom));transform:translateX(-50%) translateY(18px);background:#252936;color:#fff;border:1px solid #454b5c;padding:9px 13px;border-radius:999px;font-size:12px;opacity:0;pointer-events:none;transition:.2s;z-index:20}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-@media(max-width:620px){
-  .cover{grid-template-columns:1fr}
-  .coverArt{min-height:330px}
-  .coverCopy{text-align:center}
-  .teamStrip{grid-template-columns:repeat(4,1fr)}
-  .scenePanel{grid-template-columns:1fr}
-  .sceneImage{min-height:160px}
-}
-@media(max-width:430px){
-  .hero{padding:13px}
-  .teamStrip{grid-template-columns:repeat(2,1fr)}
-  .choices{grid-template-columns:1fr}
-  .choice.self{grid-column:auto}
-  .memberLoads{grid-template-columns:repeat(2,1fr)}
-  .title{font-size:42px}
-}
+:root{--bg:#07080d;--panel:#11131b;--line:#2b3140;--text:#f8f8fb;--muted:#9ca4b4;--pink:#ff4f9f;--pink2:#ff8dc4;--cyan:#61d8ff;--green:#6de2a7;--orange:#ffb45e;--red:#ff667b}
+*{box-sizing:border-box} html,body{margin:0;min-height:100%;background:radial-gradient(circle at 50% -10%,#31152d 0,#0a0b11 35%,#050508 100%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif}
+body{padding:max(10px,env(safe-area-inset-top)) 10px max(24px,env(safe-area-inset-bottom))} button{font:inherit}
+.app{width:min(100%,980px);margin:0 auto}.topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:4px 4px 10px}.brand{font-size:11px;letter-spacing:.14em;color:var(--muted)}.badge{font-size:10px;border:1px solid var(--line);border-radius:999px;padding:6px 9px;color:#dadde5;background:#0d0f15}
+.card{background:linear-gradient(180deg,rgba(21,23,33,.98),rgba(9,10,15,.99));border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:0 24px 70px rgba(0,0,0,.4)}
+.hero{padding:16px}.heroGrid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(250px,.65fr);gap:14px}
+.stage{position:relative;min-height:510px;border:1px solid #343948;border-radius:18px;overflow:hidden;background:radial-gradient(circle at 50% 34%,rgba(255,79,159,.18),transparent 35%),linear-gradient(180deg,#121722,#090a0f)}
+#three{display:block;width:100%;height:510px;touch-action:none}.stageInfo{position:absolute;left:12px;right:12px;top:12px;display:flex;justify-content:space-between;gap:8px;pointer-events:none}.stageTag{padding:7px 9px;border-radius:10px;background:rgba(5,6,10,.62);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(8px);font-size:10px;color:#dce0e8}.stageHint{position:absolute;left:12px;bottom:12px;padding:7px 9px;border-radius:10px;background:rgba(5,6,10,.62);border:1px solid rgba(255,255,255,.12);font-size:10px;color:#b9c0cf;pointer-events:none}
+.copy{display:flex;flex-direction:column;justify-content:center;padding:8px 2px}.title{font-size:clamp(38px,6vw,62px);line-height:.98;font-weight:900;letter-spacing:-.05em;text-shadow:0 0 28px rgba(255,79,159,.32)}.title .hot{color:var(--pink)}.sub{margin-top:13px;font-size:13px;color:#d6d2dc;line-height:1.7}.quote{margin-top:15px;padding:13px;border-radius:14px;border:1px solid #573449;background:rgba(13,9,14,.76);font-size:14px;line-height:1.7}
+.team{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:13px}.member{border:1px solid var(--line);border-radius:13px;padding:10px;background:#0e1017;cursor:pointer;text-align:left;color:var(--text)}.member b{display:block;font-size:13px}.member small{display:block;margin-top:3px;color:var(--muted);font-size:9px}.member.active{border-color:var(--pink);box-shadow:inset 0 0 0 1px rgba(255,79,159,.2)}
+.actions{display:grid;gap:9px;margin-top:14px}.primary,.ghost,.choice{min-height:48px;border-radius:14px;border:1px solid transparent;cursor:pointer;transition:.16s ease;width:100%}.primary{background:linear-gradient(180deg,#ff68af,#e84093);color:#fff;font-weight:800;box-shadow:0 0 24px rgba(255,79,159,.24)}.ghost{background:#12151d;color:#eef0f4;border-color:#343947}.primary:active,.ghost:active,.choice:active,.member:active{transform:scale(.986)}
+.game,.ending{display:none}.status{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px 12px 0}.stat{padding:10px;border:1px solid var(--line);border-radius:13px;background:#0d0f16}.statTop{display:flex;justify-content:space-between;gap:6px;font-size:10px;color:var(--muted)}.bar{height:6px;background:#252a37;border-radius:999px;margin-top:7px;overflow:hidden}.fill{height:100%;border-radius:999px;transition:width .22s ease}.pm{background:var(--pink)}.quality{background:var(--green)}.risk{background:var(--red)}
+.gameBody{padding:14px}.dayrow{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}.day{font-size:12px;color:var(--muted)}.task{font-size:10px;padding:6px 9px;border:1px solid var(--line);border-radius:999px}.gameGrid{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:12px}.scene3d{min-height:330px;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#0c1018}#gameThree{display:block;width:100%;height:330px;touch-action:none}.dialogPanel{display:flex;flex-direction:column;justify-content:center}.speaker{font-size:18px;font-weight:800}.role{margin-top:3px;font-size:10px;letter-spacing:.09em;color:var(--pink2)}.dialogue{margin-top:9px;font-size:14px;line-height:1.8;color:#e7e2ea}.taskQuote{margin-top:12px;padding:13px;border:1px solid #4a3041;background:#090a0f;border-radius:14px;font-size:14px;line-height:1.7}
+.loads{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:12px}.loadCard{padding:8px;border:1px solid var(--line);border-radius:12px;background:#0d0f16}.loadTop{display:flex;justify-content:space-between;gap:5px;font-size:10px}.loadTop b{font-size:11px}.loadFill{height:100%;border-radius:999px;background:var(--cyan)}
+.choices{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:12px}.choice{background:#171a24;color:#f4f2f6;border-color:#343947;padding:11px 12px;text-align:left;line-height:1.45}.choice small{display:block;margin-top:3px;color:var(--muted);font-size:10px}.choice.self{grid-column:1/-1;border-color:#4b3546}.result{margin-top:9px;color:#c8cbd4;font-size:12px;line-height:1.6}
+.ending{padding:20px 16px;text-align:center}.end3d{height:330px;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#0c1018;margin-bottom:14px}#endThree{display:block;width:100%;height:330px}.endTitle{font-size:26px;font-weight:900}.endText{max-width:580px;margin:12px auto 0;color:#d7d3dc;line-height:1.8;font-size:14px}.scorebox{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:18px 0}.score{padding:10px;border:1px solid var(--line);border-radius:12px;background:#0d0f16}.score b{display:block;font-size:21px}.score span{font-size:10px;color:var(--muted)}.footer{display:flex;gap:8px}.footer button{flex:1}.disclaimer{margin:12px 4px 0;text-align:center;color:#7d8492;font-size:10px;line-height:1.55}.toast{position:fixed;z-index:30;left:50%;bottom:max(22px,env(safe-area-inset-bottom));transform:translateX(-50%) translateY(15px);opacity:0;pointer-events:none;background:#252936;border:1px solid #454b5c;color:#fff;border-radius:999px;padding:9px 13px;font-size:12px;transition:.2s}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:760px){.heroGrid,.gameGrid{grid-template-columns:1fr}.copy{text-align:center}.team{text-align:left}.stage,#three{min-height:430px;height:430px}.scene3d,#gameThree{min-height:300px;height:300px}}
+@media(max-width:430px){.hero{padding:12px}.title{font-size:42px}.loads{grid-template-columns:repeat(2,1fr)}.choices{grid-template-columns:1fr}.choice.self{grid-column:auto}.stage,#three{min-height:390px;height:390px}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
 <main class="app">
-  <div class="header">
-    <div class="brand">FICTIONAL DELEGATION GAME</div>
-    <div class="badge">約3分</div>
-  </div>
+<div class="topbar"><div class="brand">3D FICTIONAL DELEGATION GAME</div><div class="badge">山崎翔 / CGW改</div></div>
+<section class="card" id="titleScreen"><div class="hero"><div class="heroGrid">
+<div class="stage"><canvas id="three" aria-label="山崎翔と4人の部下の3Dモデル"></canvas><div class="stageInfo"><div class="stageTag">PM 山崎 翔</div><div class="stageTag">TEAM 4</div></div><div class="stageHint">ドラッグで回転 / タップで選択</div></div>
+<div class="copy"><div class="title">山崎翔と<br><span class="hot">タスクの恋</span></div><div class="sub">CGW改の開発を完遂せよ<br>ただし、自分ではなるべくやるな</div><div class="quote">「このタスク、誰にお願いしようかな？」<br>山崎翔となり、5日間で部下4人へ仕事を振り分ける</div>
+<div class="team"><button class="member active" data-person="1"><b>いさじ</b><small>TEAM MEMBER</small></button><button class="member" data-person="2"><b>横山</b><small>TEAM MEMBER</small></button><button class="member" data-person="3"><b>池田</b><small>TEAM MEMBER</small></button><button class="member" data-person="4"><b>川村</b><small>TEAM MEMBER</small></button></div>
+<div class="actions"><button class="primary" id="startBtn">▶ START</button><button class="ghost" id="continueBtn">LOAD</button></div></div>
+</div></div></section>
 
-  <section class="card" id="titleScreen">
-    <div class="hero">
-      <div class="gridlines" aria-hidden="true"></div>
-      <div class="topline"><span>NEXA MOBILITY / CGW改</span><span>PROJECT MANAGER MODE</span></div>
+<section class="card game" id="gameScreen">
+<div class="status">
+<div class="stat"><div class="statTop"><span>PM余裕</span><span id="pmNum">60</span></div><div class="bar"><div class="fill pm" id="pmBar"></div></div></div>
+<div class="stat"><div class="statTop"><span>品質</span><span id="qualityNum">70</span></div><div class="bar"><div class="fill quality" id="qualityBar"></div></div></div>
+<div class="stat"><div class="statTop"><span>炎上度</span><span id="riskNum">10</span></div><div class="bar"><div class="fill risk" id="riskBar"></div></div></div>
+</div>
+<div class="gameBody"><div class="dayrow"><div class="day" id="dayLabel">DAY 1 / 5</div><div class="task" id="taskLabel">仕様レビュー</div></div>
+<div class="gameGrid"><div class="scene3d"><canvas id="gameThree" aria-label="選択対象の3Dキャラクター"></canvas></div><div class="dialogPanel"><div class="speaker">山崎 翔</div><div class="role">PROJECT MANAGER</div><div class="dialogue" id="dialogue"></div><div class="taskQuote" id="taskQuote"></div></div></div>
+<div class="loads"><div class="loadCard"><div class="loadTop"><b>いさじ</b><span id="load0n">0</span></div><div class="bar"><div class="loadFill" id="load0"></div></div></div><div class="loadCard"><div class="loadTop"><b>横山</b><span id="load1n">0</span></div><div class="bar"><div class="loadFill" id="load1"></div></div></div><div class="loadCard"><div class="loadTop"><b>池田</b><span id="load2n">0</span></div><div class="bar"><div class="loadFill" id="load2"></div></div></div><div class="loadCard"><div class="loadTop"><b>川村</b><span id="load3n">0</span></div><div class="bar"><div class="loadFill" id="load3"></div></div></div></div>
+<div class="choices" id="choices"></div><div class="result" id="result"></div></div>
+</section>
 
-      <div class="cover">
-        <div class="coverArt" aria-label="山崎翔と4人の部下のイラスト">
-          <svg viewBox="0 0 430 470" role="img" aria-label="長髪のPM山崎翔を中心にしたチームのフィクションイラスト">
-            <defs>
-              <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#202536"/><stop offset="1" stop-color="#0a0b11"/></linearGradient>
-              <radialGradient id="halo"><stop stop-color="#ff4d9d" stop-opacity=".32"/><stop offset="1" stop-color="#ff4d9d" stop-opacity="0"/></radialGradient>
-            </defs>
-            <rect width="430" height="470" fill="url(#bg)"/>
-            <circle cx="218" cy="176" r="148" fill="url(#halo)"/>
-            <g opacity=".22" stroke="#6ed9ff"><path d="M24 78H406M24 126H406M24 174H406M24 222H406M24 270H406"/><path d="M75 40V320M135 40V320M195 40V320M255 40V320M315 40V320M375 40V320"/></g>
-            <g transform="translate(132 58)">
-              <path d="M45 68c6-44 37-62 68-62 40 0 72 24 75 71l-8 73-24-15-8-63-91 12-4 72-28 13z" fill="#17141b"/>
-              <ellipse cx="107" cy="91" rx="55" ry="62" fill="#ddb29a"/>
-              <path d="M56 79c9-43 34-70 71-65 33 4 54 25 58 58-25-5-43-26-52-45-13 27-39 44-77 52z" fill="#19151d"/>
-              <path d="M58 101c-3 48-12 77-35 102 33-8 52-25 63-51m93-52c2 46 13 74 34 97-31-7-49-23-62-48" fill="#19151d"/>
-              <path d="M78 92q10-7 20 0M121 92q10-7 20 0" stroke="#3a2529" stroke-width="3" fill="none"/>
-              <path d="M102 118q10 8 21 0" stroke="#844b55" stroke-width="3" fill="none"/>
-              <path d="M62 155q46 28 91 0l28 84H32z" fill="#171923"/>
-              <path d="M93 157l15 22 15-22 17 82H73z" fill="#272b38"/>
-              <rect x="96" y="177" width="24" height="62" rx="7" fill="#0b0c11"/>
-              <text x="108" y="205" text-anchor="middle" fill="#ff8bc2" font-size="9" transform="rotate(90 108 205)">PM</text>
-            </g>
-            <g fill="#f7f7fa" font-family="sans-serif">
-              <text x="215" y="333" font-size="29" font-weight="800" text-anchor="middle">山崎 翔</text>
-              <text x="215" y="354" font-size="12" fill="#ff8bc2" text-anchor="middle">PROJECT MANAGER / 40</text>
-            </g>
-            <g transform="translate(18 374)">
-              <g transform="translate(0 0)"><circle cx="42" cy="35" r="30" fill="#2c3543"/><circle cx="42" cy="31" r="17" fill="#d7af98"/><path d="M25 29q7-26 35-11l3 12z" fill="#19171d"/><text x="42" y="79" text-anchor="middle" fill="#fff" font-size="12">いさじ</text></g>
-              <g transform="translate(103 0)"><circle cx="42" cy="35" r="30" fill="#2c3543"/><circle cx="42" cy="31" r="17" fill="#ddb59d"/><path d="M25 29q10-22 36-8l-2 13z" fill="#17171c"/><rect x="29" y="27" width="11" height="7" rx="2" fill="none" stroke="#111"/><rect x="44" y="27" width="11" height="7" rx="2" fill="none" stroke="#111"/><text x="42" y="79" text-anchor="middle" fill="#fff" font-size="12">横山</text></g>
-              <g transform="translate(206 0)"><circle cx="42" cy="35" r="30" fill="#2c3543"/><circle cx="42" cy="31" r="17" fill="#d5aa91"/><path d="M26 29q9-19 35-13l2 13z" fill="#221a17"/><text x="42" y="79" text-anchor="middle" fill="#fff" font-size="12">池田</text></g>
-              <g transform="translate(309 0)"><circle cx="42" cy="35" r="30" fill="#2c3543"/><circle cx="42" cy="31" r="17" fill="#dfb69c"/><path d="M24 31q10-30 37-10l1 14z" fill="#11141a"/><text x="42" y="79" text-anchor="middle" fill="#fff" font-size="12">川村</text></g>
-            </g>
-          </svg>
-        </div>
+<section class="card ending" id="endScreen"><div class="end3d"><canvas id="endThree" aria-label="エンディングの3Dチーム"></canvas></div><div class="endTitle" id="endTitle"></div><div class="endText" id="endText"></div><div class="taskQuote" id="endQuote"></div><div class="scorebox"><div class="score"><b id="endPm">0</b><span>PM余裕</span></div><div class="score"><b id="endQuality">0</b><span>品質</span></div><div class="score"><b id="endRisk">0</b><span>炎上度</span></div></div><div class="footer"><button class="primary" id="restartBtn">もう一度</button><button class="ghost" id="shareBtn">URLを共有</button></div></section>
+<p class="disclaimer">本作品はフィクションです。登場人物の設定、発言、役割、出来事、企業、製品、案件はすべて架空で、実在の人物・団体とは関係ありません。3D人物も架空のキャラクターモデルです。</p>
+</main><div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-        <div class="coverCopy">
-          <div class="title">山崎翔と<br><span class="hot">タスクの恋</span></div>
-          <div class="subtitle">CGW改の開発を完遂せよ<br>ただし、自分ではなるべくやるな</div>
-          <div class="tagline">「このタスク、誰にお願いしようかな？」<br>PM山崎翔となり、5日間で部下4人へ仕事を振り分ける</div>
-        </div>
-      </div>
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.178.0/build/three.module.js';
 
-      <div class="teamStrip" aria-label="チームメンバー">
-        <div class="personCard"><div class="portraitWrap"><svg viewBox="0 0 120 120"><rect width="120" height="120" fill="#17202c"/><circle cx="60" cy="51" r="30" fill="#d9af96"/><path d="M31 49q8-40 57-23l5 27q-20-10-33-27-7 18-29 23z" fill="#19171c"/><path d="M28 120q8-43 32-43t32 43" fill="#2a303d"/><circle cx="49" cy="52" r="2" fill="#33252a"/><circle cx="70" cy="52" r="2" fill="#33252a"/></svg></div><b>いさじ</b><span>TEAM MEMBER</span></div>
-        <div class="personCard"><div class="portraitWrap"><svg viewBox="0 0 120 120"><rect width="120" height="120" fill="#1e1b2b"/><circle cx="60" cy="51" r="30" fill="#deb69e"/><path d="M31 48q12-36 57-22l4 28q-25-8-33-26-10 14-28 20z" fill="#17171d"/><rect x="40" y="48" width="15" height="9" rx="3" fill="none" stroke="#222" stroke-width="2"/><rect x="65" y="48" width="15" height="9" rx="3" fill="none" stroke="#222" stroke-width="2"/><path d="M55 52h10" stroke="#222"/><path d="M27 120q9-43 33-43t33 43" fill="#303241"/></svg></div><b>横山</b><span>TEAM MEMBER</span></div>
-        <div class="personCard"><div class="portraitWrap"><svg viewBox="0 0 120 120"><rect width="120" height="120" fill="#1b2422"/><circle cx="60" cy="51" r="30" fill="#d5aa91"/><path d="M30 48q9-29 35-29 20 0 29 19l-4 14q-23-7-34-23-7 13-26 19z" fill="#261c18"/><path d="M27 120q8-44 33-44t33 44" fill="#293732"/><path d="M50 64q10 5 20 0" stroke="#7a4b45" stroke-width="2" fill="none"/></svg></div><b>池田</b><span>TEAM MEMBER</span></div>
-        <div class="personCard"><div class="portraitWrap"><svg viewBox="0 0 120 120"><rect width="120" height="120" fill="#1e202b"/><circle cx="60" cy="51" r="30" fill="#dfb69d"/><path d="M28 52q4-38 34-39 28 0 33 34-18-9-27-22-10 20-40 27z" fill="#11141a"/><path d="M27 120q8-43 33-43t33 43" fill="#2d3340"/><circle cx="49" cy="52" r="2" fill="#2b2226"/><circle cx="71" cy="52" r="2" fill="#2b2226"/></svg></div><b>川村</b><span>TEAM MEMBER</span></div>
-      </div>
+const palettes=[
+{skin:0xd9aa8f,hair:0x17131a,suit:0x161820,shirt:0x111217,accent:0xff4f9f},
+{skin:0xd8ad96,hair:0x201a18,suit:0x28303b,shirt:0xd8dde5,accent:0x61d8ff},
+{skin:0xdfb69e,hair:0x15171d,suit:0x2b2f3b,shirt:0xe6e9ef,accent:0x8e7cff},
+{skin:0xd3a68e,hair:0x2a1d18,suit:0x26362f,shirt:0xe0e5e7,accent:0x6de2a7},
+{skin:0xe0b79e,hair:0x12151a,suit:0x2b3340,shirt:0xe6e9ef,accent:0xffb45e}
+];
+const mat=(c,r=.62,m=.05)=>new THREE.MeshStandardMaterial({color:c,roughness:r,metalness:m});
+const mk=(g,m)=>{const x=new THREE.Mesh(g,m);x.castShadow=true;x.receiveShadow=true;return x};
 
-      <div class="actions">
-        <button class="primary" id="startBtn">▶ START</button>
-        <button class="ghost" id="continueBtn">LOAD</button>
-      </div>
-    </div>
-  </section>
+function person(index,scale=1){
+ const p=palettes[index],g=new THREE.Group(),skin=mat(p.skin,.78),hair=mat(p.hair,.74),suit=mat(p.suit,.68),shirt=mat(p.shirt,.8),accent=mat(p.accent,.45,.08),dark=mat(0x11131a,.8);
+ const torso=mk(new THREE.CapsuleGeometry(.36,.82,7,16),suit);torso.scale.set(1.06,1,.72);torso.position.y=1.42;g.add(torso);
+ const v=mk(new THREE.ConeGeometry(.22,.52,3),shirt);v.rotation.z=Math.PI;v.position.set(0,1.72,.29);v.scale.set(.85,1,.5);g.add(v);
+ const neck=mk(new THREE.CylinderGeometry(.12,.14,.2,16),skin);neck.position.y=2.02;g.add(neck);
+ const head=mk(new THREE.SphereGeometry(.34,28,22),skin);head.scale.set(.92,1.08,.88);head.position.y=2.35;g.add(head);
+ const cap=mk(new THREE.SphereGeometry(.37,24,18,0,Math.PI*2,0,Math.PI*.62),hair);cap.scale.set(1,1.06,.98);cap.position.set(0,2.46,-.015);g.add(cap);
+ if(index===0){
+  const a=mk(new THREE.CapsuleGeometry(.10,.72,6,12),hair);a.position.set(-.28,2.15,-.06);a.rotation.z=-.12;g.add(a);
+  const b=mk(new THREE.CapsuleGeometry(.10,.66,6,12),hair);b.position.set(.29,2.18,-.04);b.rotation.z=.13;g.add(b);
+  const f=mk(new THREE.CapsuleGeometry(.055,.42,4,10),hair);f.position.set(.11,2.48,.28);f.rotation.z=.55;g.add(f);
+ }else{
+  for(let i=0;i<3;i++){const f=mk(new THREE.CapsuleGeometry(.045,.24+i*.03,4,8),hair);f.position.set(-.13+i*.12,2.53,.27);f.rotation.z=-.42+i*.35;g.add(f)}
+ }
+ const eye=mat(0x2b2224,.9);[-.115,.115].forEach(x=>{const e=mk(new THREE.SphereGeometry(.025,10,8),eye);e.position.set(x,2.39,.305);g.add(e)});
+ const mouth=mk(new THREE.TorusGeometry(.075,.012,6,18,Math.PI),mat(0x7e4a50,.85));mouth.position.set(0,2.22,.31);mouth.rotation.x=Math.PI;g.add(mouth);
+ if(index===2){
+  const frame=mat(0x111820,.3,.2);[-.11,.11].forEach(x=>{const r=mk(new THREE.TorusGeometry(.095,.012,6,20),frame);r.position.set(x,2.39,.325);g.add(r)});
+  const bridge=mk(new THREE.BoxGeometry(.08,.014,.014),frame);bridge.position.set(0,2.39,.326);g.add(bridge);
+ }
+ [-1,1].forEach(s=>{
+  const arm=mk(new THREE.CapsuleGeometry(.10,.62,6,12),suit);arm.position.set(s*.47,1.48,0);arm.rotation.z=s*.13;g.add(arm);
+  const hand=mk(new THREE.SphereGeometry(.105,14,10),skin);hand.position.set(s*.55,1.05,.03);g.add(hand);
+  const leg=mk(new THREE.CapsuleGeometry(.13,.84,6,12),dark);leg.position.set(s*.18,.45,0);g.add(leg);
+  const shoe=mk(new THREE.BoxGeometry(.25,.14,.43),mat(0x0b0d12,.48,.18));shoe.position.set(s*.18,-.02,.10);shoe.rotation.x=-.06;g.add(shoe);
+ });
+ const badge=mk(new THREE.BoxGeometry(.25,.34,.025),mat(0xe7ebf2,.42,.1));badge.position.set(.18,1.48,.43);g.add(badge);
+ const lan=mk(new THREE.TorusGeometry(.20,.012,6,24,Math.PI),accent);lan.position.set(0,1.79,.29);lan.rotation.z=Math.PI;g.add(lan);
+ const base=mk(new THREE.CylinderGeometry(.52,.56,.08,32),mat(0x1f2430,.48,.1));base.position.y=-.16;g.add(base);
+ g.scale.setScalar(scale);return g;
+}
+function office(scene){
+ scene.background=new THREE.Color(0x0b0d13);
+ const floor=mk(new THREE.PlaneGeometry(20,20),mat(0x10141c,.52,.12));floor.rotation.x=-Math.PI/2;floor.position.y=-.22;scene.add(floor);
+ const wall=mk(new THREE.PlaneGeometry(20,7),mat(0x0e1622,.72));wall.position.set(0,2.8,-3);scene.add(wall);
+ scene.add(new THREE.GridHelper(16,20,0x30445e,0x1a2431));
+ for(let x=-6;x<=6;x+=3){const p=mk(new THREE.BoxGeometry(2.5,1.7,.06),mat(0x102943,.28,.2));p.position.set(x,3,-2.92);scene.add(p);const l=mk(new THREE.BoxGeometry(1.8,.04,.03),mat(0x61d8ff,.25,.25));l.position.set(x,3,-2.84);scene.add(l)}
+}
+function setup(canvas){
+ const r=new THREE.WebGLRenderer({canvas,antialias:true,powerPreference:'high-performance'});r.setPixelRatio(Math.min(devicePixelRatio,1.7));r.shadowMap.enabled=true;r.outputColorSpace=THREE.SRGBColorSpace;
+ const s=new THREE.Scene();office(s);const c=new THREE.PerspectiveCamera(34,1,.1,100);c.position.set(0,2,8);c.lookAt(0,1.25,0);
+ s.add(new THREE.HemisphereLight(0xc9ddff,0x17111b,2.35));const k=new THREE.DirectionalLight(0xffffff,3);k.position.set(4,7,6);k.castShadow=true;s.add(k);const p=new THREE.PointLight(0xff4f9f,14,10,2);p.position.set(-3,3,2);s.add(p);const b=new THREE.PointLight(0x61d8ff,12,10,2);b.position.set(3,2,-1);s.add(b);
+ const root=new THREE.Group();s.add(root);const pos=[[0,0,.45],[-2,0,-.45],[-.9,0,-.78],[.9,0,-.78],[2,0,-.45]],sc=[1.20,.91,.93,.93,.91],chars=[];
+ pos.forEach((p,i)=>{const x=person(i,sc[i]);x.position.set(...p);root.add(x);chars.push(x)});
+ let rot=0,drag=false,last=0;canvas.addEventListener('pointerdown',e=>{drag=true;last=e.clientX;canvas.setPointerCapture(e.pointerId)});canvas.addEventListener('pointermove',e=>{if(!drag)return;rot+=(e.clientX-last)*.006;last=e.clientX});canvas.addEventListener('pointerup',()=>drag=false);canvas.addEventListener('pointercancel',()=>drag=false);
+ const ro=new ResizeObserver(()=>{const q=canvas.getBoundingClientRect();if(!q.width||!q.height)return;r.setSize(q.width,q.height,false);c.aspect=q.width/q.height;c.updateProjectionMatrix()});ro.observe(canvas);
+ let selected=-1;const select=i=>{selected=i;chars.forEach((ch,idx)=>ch.traverse(o=>{if(o.material&&o.material.emissive){o.material.emissive.setHex(idx===i?0x160711:0);o.material.emissiveIntensity=idx===i?.7:0}}))};
+ const clock=new THREE.Clock();function loop(){const t=clock.getElapsedTime();root.rotation.y+=(rot-root.rotation.y)*.08;chars.forEach((x,i)=>{x.position.y=(i===0?.02:.01)*Math.sin(t*1.6+i)});r.render(s,c);requestAnimationFrame(loop)}loop();
+ return{select};
+}
+const title3d=setup(document.getElementById('three')),game3d=setup(document.getElementById('gameThree')),end3d=setup(document.getElementById('endThree'));
+document.querySelectorAll('.member').forEach(btn=>btn.addEventListener('click',()=>{const i=Number(btn.dataset.person);document.querySelectorAll('.member').forEach(x=>x.classList.toggle('active',x===btn));title3d.select(i)}));
 
-  <section class="card game" id="gameScreen">
-    <div class="status">
-      <div class="stat"><div class="statTop"><span>PM余裕</span><span id="pmNum">60</span></div><div class="bar"><div class="fill pm" id="pmBar"></div></div></div>
-      <div class="stat"><div class="statTop"><span>品質</span><span id="qualityNum">70</span></div><div class="bar"><div class="fill quality" id="qualityBar"></div></div></div>
-      <div class="stat"><div class="statTop"><span>炎上度</span><span id="riskNum">10</span></div><div class="bar"><div class="fill risk" id="riskBar"></div></div></div>
-    </div>
-    <div class="gamebody">
-      <div class="dayrow"><div class="day" id="dayLabel">DAY 1 / 5</div><div class="task" id="taskLabel">仕様レビュー</div></div>
-
-      <div class="scenePanel">
-        <div class="sceneImage" id="sceneImage"></div>
-        <div>
-          <div class="speaker">
-            <div class="miniPortrait" aria-hidden="true">
-              <svg viewBox="0 0 80 95"><rect width="80" height="95" fill="#17141b"/><ellipse cx="40" cy="35" rx="25" ry="28" fill="#ddb29a"/><path d="M14 33Q18 5 47 5q26 2 28 31-12-1-23-19-9 16-38 16z" fill="#17141b"/><path d="M14 38q-2 30-12 43 18-6 25-25m39-18q2 29 11 42-16-4-24-24" fill="#17141b"/><path d="M15 95q5-34 25-34t25 34" fill="#252a36"/></svg>
-            </div>
-            <div>
-              <div class="name">山崎 翔</div>
-              <div class="role">PROJECT MANAGER</div>
-              <div class="dialogue" id="dialogue"></div>
-            </div>
-          </div>
-          <div class="quote" id="quote"></div>
-        </div>
-      </div>
-
-      <div class="memberLoads">
-        <div class="loadCard"><div class="loadTop"><b>いさじ</b><span id="load0n">0</span></div><div class="bar"><div class="loadFill" id="load0"></div></div></div>
-        <div class="loadCard"><div class="loadTop"><b>横山</b><span id="load1n">0</span></div><div class="bar"><div class="loadFill" id="load1"></div></div></div>
-        <div class="loadCard"><div class="loadTop"><b>池田</b><span id="load2n">0</span></div><div class="bar"><div class="loadFill" id="load2"></div></div></div>
-        <div class="loadCard"><div class="loadTop"><b>川村</b><span id="load3n">0</span></div><div class="bar"><div class="loadFill" id="load3"></div></div></div>
-      </div>
-
-      <div class="choices" id="choices"></div>
-      <div class="resultNote" id="resultNote"></div>
-    </div>
-  </section>
-
-  <section class="card end" id="endScreen">
-    <div class="endVisual">
-      <svg viewBox="0 0 460 220" role="img" aria-label="プロジェクト完了イラスト">
-        <defs><linearGradient id="eg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#1d2230"/><stop offset="1" stop-color="#0a0b10"/></linearGradient></defs>
-        <rect width="460" height="220" fill="url(#eg)"/>
-        <circle cx="230" cy="102" r="75" fill="#ff4d9d" opacity=".14"/>
-        <path d="M226 26l24 50-20 51-20-51z" fill="#e8edf6" stroke="#667086"/>
-        <path d="M210 76l-34 38 38-8m36-30 34 38-38-8" fill="#8f9aab"/>
-        <path d="M217 128l13 34 13-34" fill="#ff8b55"/>
-        <g fill="#fff" font-family="sans-serif" font-weight="700">
-          <text x="230" y="192" font-size="21" text-anchor="middle">CGW改 RELEASE</text>
-        </g>
-        <g fill="#ff8bc2"><circle cx="79" cy="56" r="4"/><circle cx="377" cy="45" r="3"/><circle cx="345" cy="151" r="4"/><circle cx="117" cy="154" r="3"/></g>
-      </svg>
-    </div>
-    <div class="endTitle" id="endTitle"></div>
-    <div class="endText" id="endText"></div>
-    <div class="quote" id="endQuote"></div>
-    <div class="scorebox">
-      <div class="score"><b id="endPm">0</b><span>PM余裕</span></div>
-      <div class="score"><b id="endQuality">0</b><span>品質</span></div>
-      <div class="score"><b id="endRisk">0</b><span>炎上度</span></div>
-    </div>
-    <div class="footer">
-      <button class="primary" id="restartBtn">もう一度</button>
-      <button class="ghost" id="shareBtn">URLを共有</button>
-    </div>
-  </section>
-
-  <p class="disclaimer">本作品はフィクションです。登場人物の設定、発言、役割、出来事、企業、製品、案件は実在の人物・団体とは関係ありません。人物画像は実在人物の肖像ではない架空イラストです。</p>
-</main>
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-<script>
-(() => {
-  const people = ['いさじ','横山','池田','川村'];
-  const sceneSvgs = [
-    '<svg viewBox="0 0 360 220"><rect width="360" height="220" fill="#111722"/><rect x="45" y="35" width="270" height="150" rx="12" fill="#1d2533" stroke="#465167"/><rect x="72" y="63" width="110" height="10" rx="5" fill="#61d8ff"/><rect x="72" y="87" width="205" height="7" rx="3" fill="#657084"/><rect x="72" y="105" width="183" height="7" rx="3" fill="#657084"/><rect x="72" y="123" width="160" height="7" rx="3" fill="#657084"/><path d="M258 148l12 12 25-31" fill="none" stroke="#6de2a7" stroke-width="8" stroke-linecap="round"/><text x="180" y="205" text-anchor="middle" fill="#dce4ef" font-size="13">SPEC REVIEW</text></svg>',
-    '<svg viewBox="0 0 360 220"><rect width="360" height="220" fill="#161522"/><circle cx="90" cy="92" r="42" fill="#273347"/><circle cx="270" cy="92" r="42" fill="#34283f"/><path d="M130 91h97" stroke="#61d8ff" stroke-width="5" stroke-dasharray="10 8"/><path d="M205 78l23 13-23 13" fill="none" stroke="#61d8ff" stroke-width="5"/><rect x="49" y="145" width="262" height="34" rx="17" fill="#202433"/><text x="180" y="167" text-anchor="middle" fill="#f0eaf4" font-size="13">PARTNER SYNC</text></svg>',
-    '<svg viewBox="0 0 360 220"><rect width="360" height="220" fill="#111722"/><path d="M55 170V53M55 170h250" stroke="#667086" stroke-width="3"/><rect x="85" y="115" width="35" height="55" rx="5" fill="#61d8ff"/><rect x="145" y="86" width="35" height="84" rx="5" fill="#6de2a7"/><rect x="205" y="105" width="35" height="65" rx="5" fill="#ffb45e"/><rect x="265" y="64" width="35" height="106" rx="5" fill="#ff4d9d"/><path d="M82 89l65-30 62 17 88-39" fill="none" stroke="#e8edf6" stroke-width="4"/><text x="180" y="205" text-anchor="middle" fill="#dce4ef" font-size="13">PROGRESS REVIEW</text></svg>',
-    '<svg viewBox="0 0 360 220"><rect width="360" height="220" fill="#1a1116"/><path d="M180 35l116 151H64z" fill="#2b1d24" stroke="#ff687a" stroke-width="4"/><rect x="171" y="82" width="18" height="55" rx="9" fill="#ff687a"/><circle cx="180" cy="157" r="10" fill="#ff687a"/><text x="180" y="205" text-anchor="middle" fill="#f2dce3" font-size="13">ISSUE DETECTED</text></svg>',
-    '<svg viewBox="0 0 360 220"><rect width="360" height="220" fill="#111722"/><circle cx="180" cy="105" r="69" fill="#223244"/><path d="M180 43l20 50-20 49-20-49z" fill="#eef2f8"/><path d="M160 92l-35 36 40-10m35-26 35 36-40-10" fill="#9aa5b8"/><path d="M168 145l12 30 12-30" fill="#ff8b55"/><text x="180" y="205" text-anchor="middle" fill="#dce4ef" font-size="13">RELEASE JUDGEMENT</text></svg>'
-  ];
-  const chapters = [
-    {task:'仕様レビュー',text:'月曜。CGW改の仕様レビューが想定より重い。山崎翔は4人の顔を見渡した。',quote:'「このレビュー、誰にお願いしようかな？」',weight:22},
-    {task:'サプライヤ調整',text:'火曜。確認事項がまとめて到着。会議は明日の朝までに設定する必要がある。',quote:'「調整系タスク、誰に振ろう？」',weight:19},
-    {task:'進捗管理',text:'水曜。赤項目が増えた。報告資料と担当者確認を今日中にまとめたい。',quote:'「進捗、誰にまとめてもらおうかな？」',weight:18},
-    {task:'問題対応',text:'木曜18時。評価環境で問題発生。原因切り分けの担当を即決する必要がある。',quote:'「ここは誰にお願いする？」',weight:27},
-    {task:'リリース対応',text:'金曜。最後のリリース判定。残タスクを誰が持つかで週末が決まる。',quote:'「最後のひとつ、誰に振る？」',weight:24}
-  ];
-
-  const title = document.getElementById('titleScreen');
-  const game = document.getElementById('gameScreen');
-  const end = document.getElementById('endScreen');
-  const el = id => document.getElementById(id);
-  const clamp = n => Math.max(0,Math.min(100,n));
-  let state = {day:0,pm:60,quality:70,risk:10,loads:[0,0,0,0],counts:[0,0,0,0],self:0};
-
-  function save(){ localStorage.setItem('yamazaki-task-love-v2',JSON.stringify(state)); }
-  function clearSave(){ localStorage.removeItem('yamazaki-task-love-v2'); }
-  function show(screen){
-    title.style.display = screen==='title'?'block':'none';
-    game.style.display = screen==='game'?'block':'none';
-    end.style.display = screen==='end'?'block':'none';
-    window.scrollTo({top:0,behavior:'smooth'});
-  }
-  function toast(msg){
-    const t=el('toast');t.textContent=msg;t.classList.add('show');
-    setTimeout(()=>t.classList.remove('show'),1600);
-  }
-  function updateStats(){
-    el('pmNum').textContent=state.pm;el('pmBar').style.width=state.pm+'%';
-    el('qualityNum').textContent=state.quality;el('qualityBar').style.width=state.quality+'%';
-    el('riskNum').textContent=state.risk;el('riskBar').style.width=state.risk+'%';
-    state.loads.forEach((v,i)=>{el('load'+i+'n').textContent=v;el('load'+i).style.width=clamp(v)+'%'});
-  }
-  function render(){
-    if(state.day>=chapters.length){showEnding();return}
-    const c=chapters[state.day];show('game');updateStats();
-    el('dayLabel').textContent='DAY '+(state.day+1)+' / 5';
-    el('taskLabel').textContent=c.task;
-    el('dialogue').textContent=c.text;
-    el('quote').textContent=c.quote;
-    el('sceneImage').innerHTML=sceneSvgs[state.day];
-    el('resultNote').textContent='現在の負荷を見て、担当を選択';
-    const box=el('choices');box.innerHTML='';
-    people.forEach((p,i)=>{
-      const b=document.createElement('button');b.type='button';b.className='choice';
-      b.innerHTML='<span>'+p+'に振る</span><small>現在負荷 '+state.loads[i]+'</small>';
-      b.addEventListener('click',()=>assign(i));
-      box.appendChild(b);
-    });
-    const self=document.createElement('button');self.type='button';self.className='choice self';
-    self.innerHTML='<span>やっぱり自分でやる</span><small>PM余裕を消費して抱える</small>';
-    self.addEventListener('click',doSelf);box.appendChild(self);
-  }
-  function assignmentOutcome(i,weight){
-    state.loads[i]=clamp(state.loads[i]+weight);
-    state.counts[i]++;
-    state.pm=clamp(state.pm+9);
-    let q=8,r=-2;
-    if(state.loads[i]>=80){q=-9;r=18}
-    else if(state.loads[i]>=60){q=1;r=7}
-    state.quality=clamp(state.quality+q);
-    state.risk=clamp(state.risk+r);
-    const overload=state.loads[i]>=80?' ただし、かなり偏ってきた。':'';
-    return '山崎「'+people[i]+'、これお願い！」 '+people[i]+'「了解です」'+overload;
-  }
-  function advance(message){
-    updateStats();el('dialogue').textContent=message;
-    el('quote').textContent='PM余裕 '+state.pm+' / 品質 '+state.quality+' / 炎上度 '+state.risk;
-    el('resultNote').textContent='タスク振り分け完了';
-    const box=el('choices');box.innerHTML='';
-    const next=document.createElement('button');next.type='button';next.className='primary';
-    next.textContent=state.day===4?'エンディングを見る':'次の日へ';
-    next.addEventListener('click',()=>{state.day++;save();render()});box.appendChild(next);save();
-  }
-  function assign(i){advance(assignmentOutcome(i,chapters[state.day].weight))}
-  function doSelf(){
-    state.self++;state.pm=clamp(state.pm-24);state.quality=clamp(state.quality+3);state.risk=clamp(state.risk+5);
-    advance('山崎「……これは俺がやるか」 タスクは減ったが、PMの余裕も大きく減った。');
-  }
-  function showEnding(){
-    show('end');clearSave();
-    const maxLoad=Math.max(...state.loads),minLoad=Math.min(...state.loads);
-    let titleText,text,quote;
-    if(state.self>=3 || state.pm<=20){
-      titleText='END 01　結局、自分でやる';
-      text='部下に振るゲームだったはずが、気づけば山崎翔のタスクリストだけが増えていた。';
-      quote='山崎「振った方が早い。でも自分でやった方が説明は早い……」';
-    }else if(maxLoad>=85){
-      const idx=state.loads.indexOf(maxLoad);
-      titleText='END 02　'+people[idx]+'一点集中';
-      text='プロジェクトは前に進んだ。しかしタスクは一人へ美しく収束した。';
-      quote=people[idx]+'「PM、次のタスクも僕ですか？」';
-    }else if(maxLoad-minLoad<=25 && state.quality>=90 && state.risk<=25){
-      titleText='TRUE END　完璧なタスク振り';
-      text='負荷を見ながら4人へ分散。山崎翔はPMの仕事に集中し、CGW改は無事リリースされた。';
-      quote='山崎「仕事は、自分でやるんじゃない。ちゃんと振るんだ」';
-    }else{
-      titleText='END 03　なんとか金曜';
-      text='多少の偏りはあったが、チームは金曜までたどり着いた。来週のタスク表がもう届いている。';
-      quote='山崎「来週も、誰にお願いしようかな？」';
-    }
-    el('endTitle').textContent=titleText;el('endText').textContent=text;el('endQuote').textContent=quote;
-    el('endPm').textContent=state.pm;el('endQuality').textContent=state.quality;el('endRisk').textContent=state.risk;
-  }
-  function startNew(){
-    state={day:0,pm:60,quality:70,risk:10,loads:[0,0,0,0],counts:[0,0,0,0],self:0};save();render();
-  }
-  el('startBtn').addEventListener('click',startNew);
-  el('continueBtn').addEventListener('click',()=>{
-    const raw=localStorage.getItem('yamazaki-task-love-v2');
-    if(!raw){toast('セーブデータがありません');return}
-    try{const s=JSON.parse(raw);if(!Array.isArray(s.loads)||typeof s.day!=='number')throw 0;state=s;render()}catch{clearSave();toast('セーブデータを初期化しました')}
-  });
-  el('restartBtn').addEventListener('click',startNew);
-  el('shareBtn').addEventListener('click',async()=>{
-    const data={title:'山崎翔とタスクの恋',text:'PM山崎翔になって4人の部下へタスクを振る3分ゲーム',url:location.href};
-    try{
-      if(navigator.share){await navigator.share(data)}
-      else if(navigator.clipboard){await navigator.clipboard.writeText(location.href);toast('URLをコピーしました')}
-      else{toast(location.href)}
-    }catch(e){}
-  });
-})();
+const people=['いさじ','横山','池田','川村'];
+const chapters=[
+{task:'仕様レビュー',text:'月曜。CGW改の仕様レビューが想定より重い。山崎翔は4人の顔を見渡した。',quote:'「このレビュー、誰にお願いしようかな？」',weight:22},
+{task:'サプライヤ調整',text:'火曜。確認事項がまとめて到着。会議は明日の朝までに設定する必要がある。',quote:'「調整系タスク、誰に振ろう？」',weight:19},
+{task:'進捗管理',text:'水曜。赤項目が増えた。報告資料と担当者確認を今日中にまとめたい。',quote:'「進捗、誰にまとめてもらおうかな？」',weight:18},
+{task:'問題対応',text:'木曜18時。評価環境で問題発生。原因切り分けの担当を即決する必要がある。',quote:'「ここは誰にお願いする？」',weight:27},
+{task:'リリース対応',text:'金曜。最後のリリース判定。残タスクを誰が持つかで週末が決まる。',quote:'「最後のひとつ、誰に振る？」',weight:24}
+];
+const el=id=>document.getElementById(id),title=el('titleScreen'),game=el('gameScreen'),end=el('endScreen'),clamp=n=>Math.max(0,Math.min(100,n));
+let state={day:0,pm:60,quality:70,risk:10,loads:[0,0,0,0],self:0};
+function save(){localStorage.setItem('yamazaki-task-love-3d',JSON.stringify(state))}function clearSave(){localStorage.removeItem('yamazaki-task-love-3d')}
+function show(s){title.style.display=s==='title'?'block':'none';game.style.display=s==='game'?'block':'none';end.style.display=s==='end'?'block':'none';window.scrollTo({top:0,behavior:'smooth'})}
+function toast(m){const t=el('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1600)}
+function update(){[['pm','pmBar','pmNum'],['quality','qualityBar','qualityNum'],['risk','riskBar','riskNum']].forEach(([k,b,n])=>{el(n).textContent=state[k];el(b).style.width=state[k]+'%'});state.loads.forEach((v,i)=>{el('load'+i+'n').textContent=v;el('load'+i).style.width=clamp(v)+'%'})}
+function renderGame(){if(state.day>=chapters.length){ending();return}const c=chapters[state.day];show('game');update();el('dayLabel').textContent='DAY '+(state.day+1)+' / 5';el('taskLabel').textContent=c.task;el('dialogue').textContent=c.text;el('taskQuote').textContent=c.quote;el('result').textContent='現在負荷を見て担当を選択';const box=el('choices');box.innerHTML='';people.forEach((p,i)=>{const b=document.createElement('button');b.type='button';b.className='choice';b.innerHTML='<span>'+p+'に振る</span><small>現在負荷 '+state.loads[i]+'</small>';b.addEventListener('mouseenter',()=>game3d.select(i+1));b.addEventListener('focus',()=>game3d.select(i+1));b.addEventListener('click',()=>assign(i));box.appendChild(b)});const self=document.createElement('button');self.type='button';self.className='choice self';self.innerHTML='<span>やっぱり自分でやる</span><small>PM余裕を消費して抱える</small>';self.addEventListener('click',selfDo);box.appendChild(self)}
+function assign(i){const w=chapters[state.day].weight;state.loads[i]=clamp(state.loads[i]+w);state.pm=clamp(state.pm+9);let q=8,r=-2;if(state.loads[i]>=80){q=-9;r=18}else if(state.loads[i]>=60){q=1;r=7}state.quality=clamp(state.quality+q);state.risk=clamp(state.risk+r);game3d.select(i+1);advance('山崎「'+people[i]+'、これお願い！」 '+people[i]+'「了解です」'+(state.loads[i]>=80?' ただし、かなり偏ってきた。':''))}
+function selfDo(){state.self++;state.pm=clamp(state.pm-24);state.quality=clamp(state.quality+3);state.risk=clamp(state.risk+5);game3d.select(0);advance('山崎「……これは俺がやるか」 タスクは減ったが、PMの余裕も大きく減った。')}
+function advance(msg){update();el('dialogue').textContent=msg;el('taskQuote').textContent='PM余裕 '+state.pm+' / 品質 '+state.quality+' / 炎上度 '+state.risk;el('result').textContent='タスク振り分け完了';const box=el('choices');box.innerHTML='';const b=document.createElement('button');b.type='button';b.className='primary';b.textContent=state.day===4?'エンディングを見る':'次の日へ';b.addEventListener('click',()=>{state.day++;save();renderGame()});box.appendChild(b);save()}
+function ending(){show('end');clearSave();const max=Math.max(...state.loads),min=Math.min(...state.loads);let t,x,q;if(state.self>=3||state.pm<=20){t='END 01　結局、自分でやる';x='部下に振るゲームだったはずが、気づけば山崎翔のタスクリストだけが増えていた。';q='山崎「振った方が早い。でも自分でやった方が説明は早い……」';end3d.select(0)}else if(max>=85){const i=state.loads.indexOf(max);t='END 02　'+people[i]+'一点集中';x='プロジェクトは前に進んだ。しかしタスクは一人へ美しく収束した。';q=people[i]+'「PM、次のタスクも僕ですか？」';end3d.select(i+1)}else if(max-min<=25&&state.quality>=90&&state.risk<=25){t='TRUE END　完璧なタスク振り';x='負荷を見ながら4人へ分散。山崎翔はPMの仕事に集中し、CGW改は無事リリースされた。';q='山崎「仕事は、自分でやるんじゃない。ちゃんと振るんだ」';end3d.select(-1)}else{t='END 03　なんとか金曜';x='多少の偏りはあったが、チームは金曜までたどり着いた。来週のタスク表がもう届いている。';q='山崎「来週も、誰にお願いしようかな？」';end3d.select(-1)}el('endTitle').textContent=t;el('endText').textContent=x;el('endQuote').textContent=q;el('endPm').textContent=state.pm;el('endQuality').textContent=state.quality;el('endRisk').textContent=state.risk}
+function start(){state={day:0,pm:60,quality:70,risk:10,loads:[0,0,0,0],self:0};save();renderGame()}
+el('startBtn').addEventListener('click',start);el('continueBtn').addEventListener('click',()=>{const raw=localStorage.getItem('yamazaki-task-love-3d');if(!raw){toast('セーブデータがありません');return}try{const s=JSON.parse(raw);if(!Array.isArray(s.loads)||typeof s.day!=='number')throw 0;state=s;renderGame()}catch{clearSave();toast('セーブデータを初期化しました')}});el('restartBtn').addEventListener('click',start);el('shareBtn').addEventListener('click',async()=>{const data={title:'山崎翔とタスクの恋',text:'山崎翔になって4人の部下へタスクを振る3Dゲーム',url:location.href};try{if(navigator.share)await navigator.share(data);else if(navigator.clipboard){await navigator.clipboard.writeText(location.href);toast('URLをコピーしました')}else toast(location.href)}catch{}});
 </script>
 </body>
 </html>
