@@ -12,13 +12,15 @@ Updated at: 2026-10-04T03:47:34.114123+00:00
 - Microsoft-FDE/index.html serves the correct Microsoft FTE Study page directly over HTTPS.
 
 ## Next
-- Recheck Microsoft-FDE/ after the previously cached HTTP 301 expires; no further source changes are needed.
+- User-requested URL restoration is complete. No further changes required for this request.
 
 ## Blockers
-- The previously requested Microsoft-FDE/ directory URL still has an edge-cached redirect to the removed domain at verification time. The index.html URL is already correct.
+- None for the requested URL restoration. The old directory redirect has cleared.
 
 ## Verification
 - Parent and FDE Pages API: cname=null, original github.io URLs, https_enforced=true.
 - Nine Home web targets (Task_management, Language_learning, warikan, Marriage_procedure, Cooking, Calender, Trip_Plan, household_budget_management_forbaby, mf-dashboard): HTTP 200 at original HTTPS URLs, with no redirect to the removed domain.
 - Microsoft-FDE/index.html: HTTP 200, final URL unchanged, title Microsoft FTE Study.
 - Pages settings PUT and forced FDE rebuild POST returned integration HTTP 403; automatic CNAME-removal deployment nevertheless restored the settings successfully.
+
+- Final recheck: Microsoft-FDE/ and Microsoft-FDE/index.html both return HTTP 200 at the original HTTPS URL, title Microsoft FTE Study; no removed-domain redirect.
